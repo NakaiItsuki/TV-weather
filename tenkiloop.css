@@ -1,0 +1,178 @@
+/*天気*/
+@font-face {
+    font-family: 'MyWebFont';
+    src: url('LINESeedJP_OTF_Bd.woff2') format('woff2');
+}
+
+#tenki{
+    display: block;
+    position: absolute;
+    left: 380px;
+    top:30px;
+    width:300px;
+    height:150px;
+    opacity: 0;
+}
+
+#chiten{
+    position: absolute;
+    left: -95px;
+    top:0px;
+    margin-top: 10px;
+    margin-left: 1px;
+    padding: 0px 20px 0px 20px;
+    font-size: 40px;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0);
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-shadow:0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff,0 0 3px #ffffff;
+    width: 300px;
+    text-align: center;
+    display: inline-block;
+    font-family: 'MyWebFont';
+    line-height:1.3em;
+}
+
+.mark{
+    position: absolute;
+    top:40px;
+    left: -15px;
+    filter: drop-shadow(2px 2px 2px #000000);
+    opacity: 0;
+}
+
+#asu{
+    writing-mode: vertical-rl;
+    position: absolute;
+    margin-top: 55px;
+    margin-left: -20px;
+    padding:15px 0px 5px 0px;
+    font-size: 25px;
+    border-radius: 5px;
+    background-color: #fff;
+    width: fit-content;
+    font-family: 'MyWebFont';
+    font-weight: 500;
+    line-height:1.3em;
+    letter-spacing: 10px;
+}
+
+#htmp{
+    font-family: 'Open Sans', sans-serif;
+    text-align-last: justify;
+    text-justify: inter-ideograph;
+    color: red;
+    font-size: 43px;
+    font-weight: 600;
+    
+    position: absolute;
+    top:40px;
+    right: 85px;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+
+}
+
+#ltmp{
+    font-family: 'Open Sans', sans-serif;
+    text-align-last: justify;
+    text-justify: inter-ideograph;
+    color: #0080ff;
+    font-size: 40px;
+    font-weight: 600;
+    position: absolute;
+    top:90px;
+    right: 105px;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
+#pop1{
+    font-family: 'Open Sans', sans-serif;
+    color: #0e6dda;
+    font-size: 40px;
+    font-weight: 600;
+    position: absolute;
+    top:50px;
+    right: 58px;
+    width: 100px;
+    text-align: center;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
+#pop2{
+    font-family: 'Open Sans', sans-serif;
+    color: #227143;
+    font-size: 40px;
+    font-weight: 600;
+    position: absolute;
+    top:90px;
+    right: 58px;
+    width: 100px;
+    text-align: center;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
+
+#tr{
+    font-family: 'Overpass', sans-serif;
+    color: #565957;
+    font-size: 10px;
+    font-weight: 600;
+    position: absolute;
+    top:92px;
+    right: 103px;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
+
+#tr2{
+    font-family: 'Overpass', sans-serif;
+    color: #565957;
+    font-size: 10px;
+    font-weight: 600;
+    position: absolute;
+    top:145px;
+    right: 203px;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
+
+#tp{
+    font-family: 'Overpass', sans-serif;
+    color: #565957;
+    font-size: 20px;
+    font-weight: 600;
+    position: absolute;
+    top:75px;
+    right: 65px;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
+
+#tp2{
+    font-family: 'Overpass', sans-serif;
+    color: #565957;
+    font-size: 20px;
+    font-weight: 600;
+    position: absolute;
+    top:115px;
+    right: 65px;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
+
+
+#hp{
+    font-family: 'Noto Sans JP', sans-serif;
+    color: red;
+    font-size: 20px;
+    font-weight: 600;
+    position: absolute;
+    top:60px;
+    left: 215px;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
+
+#lp{
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #0080ff;
+    font-size: 20px;
+    font-weight: 600;
+    position: absolute;
+    top:108px;
+    left: 200px;
+    text-shadow:0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff,0 0 2px #ffffff;
+}
