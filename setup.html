@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TV weather</title>
+  <link rel="stylesheet" href="tenkiloop.css">
+  <script src="jquery-3.5.1.min.js"></script>
+  <script src="program.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>気象庁の地方名一覧</h1>
+    <ul id="areaList">
+        <!-- ここに地名が表示されます -->
+      </ul>
+    <script>
+    fetch('https://www.jma.go.jp/bosai/common/const/area.json')
+      .then(response => response.json())
+      .then(data => {
+        // nameを取得して表示
+        const areaListElement = document.getElementById('areaList');
+        
+        for (const centerCode in data.centers) {
+            const center = data.centers[centerCode];
+            const li = document.createElement('li');
+            console.log(center.children)
+            li.textContent = center.name;
+            areaListElement.appendChild(li);
+            for (var i=0;i<center.children.length;i++) {
+                console.log(center.children[i])
+                url = "https://www.jma.go.jp/bosai/forecast/data/forecast/"+center.children[i]+".json";
+            }
+        }
+      })
+      .catch(error => console.error('データの取得に失敗しました。', error));
+    </script>
+</body>
+</html>

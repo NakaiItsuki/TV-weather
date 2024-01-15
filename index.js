@@ -33,10 +33,10 @@ app.on("ready", () => {
   //使用するhtmlファイルを指定する
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
-  //subWindow = new BrowserWindow({width: 320, height: 180,resizable: false,toolbar: false,alwaysOnTop: true});
-  //mainWindow.setIgnoreMouseEvents(true);
-  //subWindow.setIgnoreMouseEvents(true, {forward: true});
-  //subWindow.loadURL(`file://${__dirname}/subindex.html`);
+  subWindow = new BrowserWindow({width: 600, height: 400,resizable: true,toolbar: false,alwaysOnTop: false});
+  // mainWindow.setIgnoreMouseEvents(true);
+  // subWindow.setIgnoreMouseEvents(true, {forward: true});
+  subWindow.loadURL(`file://${__dirname}/subindex.html`);
 
   
 
