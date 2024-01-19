@@ -1,53 +1,46 @@
-"use strct";
-
-// Electronのモジュール
-const electron = require("electron");
-
-// アプリケーションをコントロールするモジュール
-const app = electron.app;
-
-// ウィンドウを作成するモジュール
-const BrowserWindow = electron.BrowserWindow;
-
-//app.disableHardwareAcceleration();
-
-// メインウィンドウはGCされないようにグローバル宣言
-let mainWindow = null;
-
-// 全てのウィンドウが閉じたら終了
-app.on("window-all-closed", () => {
-  if (process.platform != "darwin") {
-    app.quit();
-  }
-});
+const path = require('node:path');
+const { BrowserWindow, app, ipcMain } = require('electron');
 
 
-
-
-// Electronの初期化完了後に実行
-app.on("ready", () => {
-  //ウィンドウサイズを1280*720（フレームサイズを含まない）に設定する
-  mainWindow = new BrowserWindow({width: 1920, height: 1080,resizable: false, useContentSize:false,transparent: true, frame: false,toolbar: false,alwaysOnTop: true});
-  //mainWindow.setIgnoreMouseEvents(true);
+app.whenReady().then(() => {
+  // メインウィンドウ
+  const mainWindow = new BrowserWindow({
+    width: 1920, height: 1080,resizable: false, useContentSize:false,transparent: true, frame: false,toolbar: false,alwaysOnTop: true,
+    webPreferences: {
+      preload: path.resolve(__dirname, 'preload.js'),
+    },
+  });
+  // mainWindow 用の HTML をロード
+  mainWindow.loadFile('index.html');
   mainWindow.setIgnoreMouseEvents(true, {forward: true});
-  //使用するhtmlファイルを指定する
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
-
-  subWindow = new BrowserWindow({width: 600, height: 400,resizable: true,toolbar: false,alwaysOnTop: false});
-  // mainWindow.setIgnoreMouseEvents(true);
-  // subWindow.setIgnoreMouseEvents(true, {forward: true});
-  subWindow.loadURL(`file://${__dirname}/subindex.html`);
-
   
 
-
-  // ウィンドウが閉じられたらアプリも終了
-  mainWindow.on("closed", () => {
-    mainWindow = null;
+  // レンダラープロセスから 'open-window' チャンネルへ着信
+  ipcMain.handle('open-window', () => {
+    // 子ウィンドウを作成
+    const subWindow = new BrowserWindow({
+      title: 'Sub Window',
+      width: 1000, height: 650,
+      webPreferences: {
+        // 子ウィンドウでもプリロードスクリプトを読み込み
+        // ※別ファイルのスクリプトとしても良い
+        preload: path.resolve(__dirname, 'subp.js'),
+      },
+    });
+    // 子ウィンドウ用 HTML
+    subWindow.loadFile('setup.html');
+    subWindow.setMenuBarVisibility(false);
+    subWindow.on('close', (event) => {
+      mainWindow.close();
+    });
+  });
+  ipcMain.on('message', (e, arg) => {
+    // #3 'reply' チャンネルへ転送 (メインプロセス -> 親ウィンドウ)
+    mainWindow.webContents.send('reply', arg);
   });
 
-});
+  mainWindow.on('close', (event) => {
+    app.quit();
+  });
 
-app.on('activate', () => {
-  mainWindow.setIgnoreMouseEvents(false);
 });

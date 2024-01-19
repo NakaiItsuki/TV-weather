@@ -1,0 +1,275 @@
+html,body, div, p, span, h1, h2, ul, ol, li, dl, dt, dd { margin: 0; padding: 0; width:100%;user-select: none;}
+
+body{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 100dvh;
+    color:#1a1a1a;
+    background-color: #f3f3f3;
+}
+#menuArea{
+    width: 30%;
+    padding: 10px;
+}
+#detailesArea{
+    width: 70%;
+    position: relative;
+}
+
+
+#chitenAreaContents{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    color:#1a1a1a;
+    position: relative;
+}
+
+#ichiAreaContents{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    color:#1a1a1a;
+    position: relative;
+}
+
+
+
+
+
+h1{
+    width: 100%;
+}
+
+#menuArea h1{
+    margin-bottom: 30px;
+}
+
+
+
+
+p{
+    width: 100%;
+    color:#5c5c5c
+}
+
+#menuArea p{
+    color:#1a1a1a;
+}
+
+.detailesAreaContents{
+    max-width: 700px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#topArea{
+    padding: 10px;
+    background-color: #f3f3f3;
+    display: flex;
+    flex-direction: column;
+    height: 80px;
+    color:#1a1a1a;
+    width: auto;
+}
+
+#centerArea{
+    background-color:#f3f3f3;
+    display: flex;
+    flex: 1;
+    height: auto;
+    overflow-y: scroll;
+}
+
+#bottomArea{
+    background-color: #f3f3f3;
+    display: flex;
+    padding: 10px;
+    height: 40px;
+    flex-direction: row-reverse;
+    color:#5c5c5c;
+    width: 100%;
+}
+
+#bottomArea p{
+    width: auto;
+    height: 100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 150px;
+}
+
+#resetListCheck{
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    background-color: #fefefe;
+    color:#1a1a1a;
+    border-radius: 5px;
+    border: 0.5px solid #cecece;
+    font-size: 15px;
+    padding: 5px 15px 5px 15px;
+}
+#resetListCheck:hover{
+    background-color: #f8f8f8;
+}
+
+#setListCheck{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    background-color: #005fba;
+    color:#ffffff;
+    border-radius: 5px;
+    border: 0.5px solid #0f4273;
+    font-size: 15px;
+    padding: 5px 15px 5px 15px;
+}
+
+#setListCheck:hover{
+    background-color: #196ec0;
+}
+
+.centername{
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+}
+
+.centername p{
+    width: 90%;
+    height: 20px;
+    margin: 15px;
+}
+
+.td_list{
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+}
+
+.td_list p{
+    width: 90%;
+    height: 20px;
+    margin: 15px;
+    color:#1a1a1a;
+}
+
+.td_list:hover{
+    background-color: #f6f6f6;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f3f3f3;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1a1a1a;
+    border-radius: 10px;
+  }
+
+#menuAreaDisplay{
+    max-width: 300px;
+}
+
+#chitenListCheck{
+    background-color: #ededed;
+}
+
+.fluentButton{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    color:#1a1a1a;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    margin: 5px;
+    
+}
+
+/* .fluentButton:hover{
+    background-color: #ededed;
+} */
+
+.fluentImgArea{
+    display: flex;
+    width: 10%;
+    align-items: center;
+    justify-content: center;
+}
+
+.fluentImg{
+    height: 20px;
+    margin-left: 20px;
+}
+
+.fluentButton p{
+    display: flex;
+    width: 90%;
+    align-items: center;
+    justify-content: left;
+    margin-left: 20px;
+}
+
+#gamen_png{
+    max-width: 500px;
+    margin: 20px;
+}
+input[type="number"]{
+    width: 100px;
+    height: 30px;
+    font-size: 18px;
+    border: 0.5px solid #848484;
+    border-radius: 5px;
+    margin: 10px;
+}
+#buttonarea{
+    width: auto;
+    padding: 10px 0px 10px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+#setichiCheck{
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    background-color: #005fba;
+    color:#ffffff;
+    border-radius: 5px;
+    border: 0.5px solid #0f4273;
+    font-size: 15px;
+    padding: 5px 15px 5px 15px;
+}
+#setichiCheck:hover{
+    background-color: #196ec0;
+}
+
+#resetichiCheck{
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    background-color: #fefefe;
+    color:#1a1a1a;
+    border-radius: 5px;
+    border: 0.5px solid #cecece;
+    font-size: 15px;
+    padding: 5px 15px 5px 15px;
+}
+#resetichiCheck:hover{
+    background-color: #f8f8f8;
+}

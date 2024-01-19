@@ -1,14 +1,18 @@
 $(function () {
 
+window.myAPI.openWindow();
+
+
+
 var urls=[];
-urls[0] = "https://www.jma.go.jp/bosai/forecast/data/forecast/016000.json";
-urls[1] = "https://www.jma.go.jp/bosai/forecast/data/forecast/040000.json";
-urls[2] = "https://www.jma.go.jp/bosai/forecast/data/forecast/150000.json";
-urls[3] = "https://www.jma.go.jp/bosai/forecast/data/forecast/130000.json";
-urls[4] = "https://www.jma.go.jp/bosai/forecast/data/forecast/230000.json";
-urls[5] = "https://www.jma.go.jp/bosai/forecast/data/forecast/270000.json";
-urls[6] = "https://www.jma.go.jp/bosai/forecast/data/forecast/340000.json";
-urls[7] = "https://www.jma.go.jp/bosai/forecast/data/forecast/400000.json";
+urls[0] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/016000.json","0"];
+urls[1] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/040000.json","0"];
+urls[2] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/150000.json","0"];
+urls[3] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/130000.json","0"];
+urls[4] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/230000.json","0"];
+urls[5] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/270000.json","0"];
+urls[6] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/340000.json","0"];
+urls[7] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/400000.json","0"];
 
 var array=[];
 var childarray=[];
@@ -22,15 +26,44 @@ var nowSec;
 
 var i=0;
 var j=0;
+
+var xnumdata = window.localStorage.getItem('tenkixnum');
+var ynumdata = window.localStorage.getItem('tenkiynum');
+
+if(xnumdata!=null){
+    $('#tenki').css('left', xnumdata+'px');
+    $('#tenki').css('top', ynumdata+'px');
+}
 function loadjson(){
     array=[];
+    i=0;
     for(var t=0;t<urls.length;t++){
-        fetch(urls[t],{cache: "no-store"})
-        .then( response => response.json() )
-        .then( weather => formatWeather(weather));
+        try {
+            var jsonData = fetchJsonSync(urls[t][0]);
+            formatWeather(jsonData,Number(urls[t][1]));
+          } catch (error) {
+            console.error('データの取得に失敗しました。', error);
+          }
     }
 }
+function fetchJsonSync(url) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url, false);
+    request.send();
 
+    if (request.status === 200) {
+        return JSON.parse(request.responseText);
+    } else {
+        throw new Error(`Failed to fetch data: ${request.status}`);
+    }
+}
+var serializedArray = window.localStorage.getItem('urldata');
+
+if(serializedArray!=null){
+    var getValue = JSON.parse(serializedArray);
+    urls=[];
+    urls=getValue;
+}
 loadjson();
 
 var loadflag=0;
@@ -519,23 +552,38 @@ function putsWeather(){
     }
 }
 
+function reload_tenki(data){
+    urls=[];
+    for (var i=1;i<data.length;i++) {
+        var part1 = data[i].substr(0, 6); // "100009"
+        var part2 = data[i].substr(6);
+        url = "https://www.jma.go.jp/bosai/forecast/data/forecast/"+part1+".json";
+        var tdata = [url,part2];
+        urls.push(tdata);
+    }
+    window.localStorage.removeItem("urldata");
+    const serializedArray = JSON.stringify(urls);
+    window.localStorage.setItem('urldata', serializedArray);
+    array=[];
+    
+}
 
-function formatWeather(weather){
+function formatWeather(weather,num){
     var dd;
-    var area = weather[0].timeSeries[0].areas[0].area.name;
-    var tenki = weather[0].timeSeries[0].areas[0].weatherCodes[0];
-    var htmp=weather[0].timeSeries[2].areas[0].temps[1];
-    var ltmp=weather[0].timeSeries[2].areas[0].temps[0];
-    var pop1=weather[0].timeSeries[1].areas[0].pops[0];
-    var pop2=weather[0].timeSeries[1].areas[0].pops[1];
-    var ntenki = weather[0].timeSeries[0].areas[0].weatherCodes[1];
-    var nhtmp=weather[0].timeSeries[2].areas[0].temps[2];
-    var nltmp=weather[0].timeSeries[2].areas[0].temps[1];
-    var npop1=weather[0].timeSeries[1].areas[0].pops[2];
-    var npop2=weather[0].timeSeries[1].areas[0].pops[3];
+    var area = weather[0].timeSeries[2].areas[num].area.name;
+    var tenki = weather[0].timeSeries[0].areas[num].weatherCodes[0];
+    var htmp=weather[0].timeSeries[2].areas[num].temps[1];
+    var ltmp=weather[0].timeSeries[2].areas[num].temps[0];
+    var pop1=weather[0].timeSeries[1].areas[num].pops[0];
+    var pop2=weather[0].timeSeries[1].areas[num].pops[1];
+    var ntenki = weather[0].timeSeries[0].areas[num].weatherCodes[1];
+    var nhtmp=weather[0].timeSeries[2].areas[num].temps[2];
+    var nltmp=weather[0].timeSeries[2].areas[num].temps[1];
+    var npop1=weather[0].timeSeries[1].areas[num].pops[2];
+    var npop2=weather[0].timeSeries[1].areas[num].pops[3];
     if(nhtmp==null){
-        nhtmp=weather[0].timeSeries[2].areas[0].temps[1];
-        nltmp=weather[0].timeSeries[2].areas[0].temps[0];
+        nhtmp=weather[0].timeSeries[2].areas[num].temps[1];
+        nltmp=weather[0].timeSeries[2].areas[num].temps[0];
     }
     if(parseInt(nhtmp)<parseInt(nltmp)){
         dd=nhtmp;
@@ -547,21 +595,7 @@ function formatWeather(weather){
         htmp=ltmp;
         ltmp=dd;
     }
-    area = area.replace("地方", "");
     
-    if(area=='西部'){
-        area='名古屋';
-    }else if(area=='大阪府'){
-        area='大阪';
-    }else if(area=='石狩'){
-        area="札幌";
-    }else if(area=='南部'){
-        area="広島";
-    }else if(area=='東部'){
-        area="仙台";
-    }else if(area=='下越'){
-        area="新潟";
-    }
     childarray= { area:area, tenki:tenki, htmp:htmp, ltmp:ltmp, pop1:pop1, pop2:pop2, ntenki:ntenki, nhtmp:nhtmp, nltmp:nltmp, npop1:npop1, npop2:npop2 };
     array[array.length]=childarray;
     
@@ -577,6 +611,21 @@ setInterval(() => {
 setInterval(() => { 
     loadjson();
 }, 3600000);
+
+window.myAPI.onReply((e, arg) => {
+    // メインプロセスから転送されてきたメッセージを表示
+    //alert(arg);
+    if(arg[0]==1){
+        reload_tenki(arg);
+        loadjson();
+    }else if(arg[0]==2){
+        $('#tenki').css('left', arg[1]+'px');
+        $('#tenki').css('top', arg[2]+'px');
+        window.localStorage.setItem('tenkixnum', arg[1]);
+        window.localStorage.setItem('tenkiynum', arg[2]);
+    }
+    
+});
 
 
 
