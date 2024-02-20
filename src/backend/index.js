@@ -11,7 +11,7 @@ app.whenReady().then(() => {
     },
   });
   // mainWindow 用の HTML をロード
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile('./src/frontend/tenki/index.html');
   mainWindow.setIgnoreMouseEvents(true, {forward: true});
   
 
@@ -28,7 +28,7 @@ app.whenReady().then(() => {
       },
     });
     // 子ウィンドウ用 HTML
-    subWindow.loadFile('setup.html');
+    subWindow.loadFile('./src/frontend/setup/setup.html');
     subWindow.setMenuBarVisibility(false);
     subWindow.on('close', (event) => {
       mainWindow.close();

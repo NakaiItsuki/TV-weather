@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TV weather</title>
+  <link rel="stylesheet" href="setup.css">
+  <link rel="stylesheet" href="../tenki/tenkiloop.css">
+  <script src="jquery-3.5.1.min.js"></script>
+  <script src="setup.js"></script>
+</head>
+<body>
+  <div id="menuArea">
+    <h1>設定</h1>
+    <div id="menuAreaDisplay">
+      <div class="fluentButton" id="chitenListCheck"><div class="fluentImgArea"><img class="fluentImg"src="../../../img/other/ic_fluent_location_24_filled.png"></div><p>地点</p></div>
+      <div class="fluentButton" id="ichiListCheck"><div class="fluentImgArea"><img class="fluentImg"src="../../../img/other/ic_fluent_position_forward_24_filled.png"></div><p>表示位置</p></div>
+    </div>
+    
+  </div>
+  <div id="detailsArea">
+    <div class="detailesAreaContents" id="chitenAreaContents">
+      <div id="topArea">
+        <h1>地点</h1>
+        <p>表示したい地点を選択してください</p>
+      </div>
+      <div id="centerArea">
+        <table class="areaList">
+          <!-- ここに地名が表示されます -->
+        </table>
+      </div>
+      <div id="bottomArea">
+        <p id="checknum">選択済みの地点：0</p>
+      </div>
+      <input id="resetListCheck" type="button" value="リセット"/>
+      <input id="setListCheck" type="button" value="決定"/>
+    </div>
+    <div class="detailesAreaContents" id="ichiAreaContents">
+      <div id="topArea">
+        <h1>表示位置</h1>
+        <p>表示したい位置を設定してください</p>
+      </div>
+        <img src="./gamen.png" id="gamen_png">
+        <div class='td_list'>
+          <p>X軸</p>
+          <input type="number" id="inputxnum" max="1920" min="1" value="380"style="text-align:right">
+        </div>
+        <div class='td_list'>
+          <p>Y軸</p>
+          <input type="number" id="inputynum" max="1920" min="1" value="30"style="text-align:right">
+        </div>
+        <div id="buttonarea">
+          <input id="resetichiCheck" type="button" value="初期値"/>
+          <input id="setichiCheck" type="button" value="決定"/>
+          
+        </div>
+        
+    </div>
+  </div>
+</body>
+</html>

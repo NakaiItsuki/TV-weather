@@ -1,10 +1,7 @@
 /*天気*/
-
-
-
 @font-face {
     font-family: 'MyWebFont';
-    src: url('LINESeedJP_OTF_Bd.woff2') format('woff2');
+    src: url('../../../font/LINESeedJP_OTF_Bd.woff2') format('woff2');
 }
 
 #tenki{
