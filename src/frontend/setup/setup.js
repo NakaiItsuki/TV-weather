@@ -111,7 +111,7 @@ $(function () {
     }, function () {
         if (now_page == 1) {
             if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
-                $('#ichiListCheck').css('background-color', '#2b2b2b');
+                $('#ichiListCheck').css('background-color', '#202020');
             } else {
                 $('#ichiListCheck').css('background-color', '#f3f3f3');
             }
@@ -129,7 +129,7 @@ $(function () {
     }, function () {
         if (now_page == 0) {
             if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
-                $('#ichiListCheck').css('background-color', '#2b2b2b');
+                $('#ichiListCheck').css('background-color', '#202020');
             } else {
                 $('#ichiListCheck').css('background-color', '#f3f3f3');
             }
@@ -140,7 +140,7 @@ $(function () {
         if (now_page == 0) {
             if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
                 $('#chitenListCheck').css('background-color', '#3c3c3c');
-                $('#ichiListCheck').css('background-color', '#2b2b2b');
+                $('#ichiListCheck').css('background-color', '#202020');
                 $("#ichiAreaContents").toggle();
                 $("#chitenAreaContents").toggle();
             } else {
@@ -158,7 +158,7 @@ $(function () {
 
         if (now_page == 1) {
             if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
-                $('#chitenListCheck').css('background-color', '#2b2b2b');
+                $('#chitenListCheck').css('background-color', '#202020');
                 $('#ichiListCheck').css('background-color', '#3c3c3c');
                 $("#ichiAreaContents").toggle();
                 $("#chitenAreaContents").toggle();
