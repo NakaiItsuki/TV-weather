@@ -1,7 +1,7 @@
 {
   "name": "tvweather",
   "productName": "TV weather",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "TV weather",
   "main": "./src/backend/index.js",
   "scripts": {
