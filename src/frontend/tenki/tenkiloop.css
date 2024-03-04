@@ -195,39 +195,3 @@
 .checkarea{
     width: 30%;
 }
-
-
-td{
-    margin: 0;
-    /* border-collapse: collapse;
-    border-spacing: 0;
-    border: solid 0.5px rgba(0,0,0,0);
-    background-color:#f6f6f6;
-    border-radius: 10px; */
-}
-th{
-    margin: 0;
-    border-collapse: collapse;
-    border-spacing: 0;
-    border-top: solid 4px #f3f3f3;
-    background-color: #f3f3f3;
-    color:#1a1a1a;
-    padding: 10px;
-}
-input[type="checkbox"] {
-    accent-color: #196ec0;
-    width: 20px;
-    height: 20px;
-    margin: 15px;
-}
-
-.td_list{
-    border-collapse: collapse;
-    border-spacing: 0;
-    border: solid 0.5px #e7e3ea;
-    background-color:#fbfbfb;
-    border-radius: 10px;
-    margin: 1px;
-}
-
-

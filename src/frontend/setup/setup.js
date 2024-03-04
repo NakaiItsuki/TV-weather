@@ -6,10 +6,15 @@ $(function () {
     var urls = [];
     var serializedArray1 = window.localStorage.getItem('urldatanum');
 
-    
+
     if (xnumdata != null) {
         $("#inputxnum").val(xnumdata);
         $("#inputynum").val(ynumdata);
+    }
+
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
+        $('#menuAreaDisplay').empty();
+        $('#menuAreaDisplay').append('<div class="fluentButton" id="chitenListCheck"><div class="fluentImgArea"><img class="fluentImg"src="../../../img/other/dark_ic_fluent_location_24_filled.png"></div><p>地点</p></div><div class="fluentButton" id="ichiListCheck"><div class="fluentImgArea"><img class="fluentImg"src="../../../img/other/dark_ic_fluent_position_forward_24_filled.png"></div><p>表示位置</p></div>');
     }
     $("#ichiAreaContents").toggle();
     fetch('https://www.jma.go.jp/bosai/common/const/area.json')
@@ -96,30 +101,54 @@ $(function () {
     var now_page = 1;
     $("#ichiListCheck").hover(function () {
         if (now_page == 1) {
-            $('#ichiListCheck').css('background-color', '#ededed');
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
+                $('#ichiListCheck').css('background-color', '#3c3c3c');
+            } else {
+                $('#ichiListCheck').css('background-color', '#ededed');
+            }
+
         }
     }, function () {
         if (now_page == 1) {
-            $('#ichiListCheck').css('background-color', '#f3f3f3');
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
+                $('#ichiListCheck').css('background-color', '#2b2b2b');
+            } else {
+                $('#ichiListCheck').css('background-color', '#f3f3f3');
+            }
         }
     });
 
     $("#chitenListCheck").hover(function () {
         if (now_page == 0) {
-            $('#chitenListCheck').css('background-color', '#ededed');
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
+                $('#chitenListCheck').css('background-color', '#3c3c3c');
+            } else {
+                $('#chitenListCheck').css('background-color', '#ededed');
+            }
         }
     }, function () {
         if (now_page == 0) {
-            $('#chitenListCheck').css('background-color', '#f3f3f3');
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
+                $('#ichiListCheck').css('background-color', '#2b2b2b');
+            } else {
+                $('#ichiListCheck').css('background-color', '#f3f3f3');
+            }
         }
     });
     $('#chitenListCheck').on('click', function () {
 
         if (now_page == 0) {
-            $('#chitenListCheck').css('background-color', '#ededed');
-            $('#ichiListCheck').css('background-color', '#f3f3f3');
-            $("#ichiAreaContents").toggle();
-            $("#chitenAreaContents").toggle();
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
+                $('#chitenListCheck').css('background-color', '#3c3c3c');
+                $('#ichiListCheck').css('background-color', '#2b2b2b');
+                $("#ichiAreaContents").toggle();
+                $("#chitenAreaContents").toggle();
+            } else {
+                $('#chitenListCheck').css('background-color', '#ededed');
+                $('#ichiListCheck').css('background-color', '#f3f3f3');
+                $("#ichiAreaContents").toggle();
+                $("#chitenAreaContents").toggle();
+            }
 
             now_page = 1;
         }
@@ -128,10 +157,18 @@ $(function () {
     $('#ichiListCheck').on('click', function () {
 
         if (now_page == 1) {
-            $('#chitenListCheck').css('background-color', '#f3f3f3');
-            $('#ichiListCheck').css('background-color', '#ededed');
-            $("#ichiAreaContents").toggle();
-            $("#chitenAreaContents").toggle();
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches == true) {
+                $('#chitenListCheck').css('background-color', '#2b2b2b');
+                $('#ichiListCheck').css('background-color', '#3c3c3c');
+                $("#ichiAreaContents").toggle();
+                $("#chitenAreaContents").toggle();
+            } else {
+                $('#chitenListCheck').css('background-color', '#f3f3f3');
+                $('#ichiListCheck').css('background-color', '#ededed');
+                $("#ichiAreaContents").toggle();
+                $("#chitenAreaContents").toggle();
+            }
+
 
             now_page = 0;
         }

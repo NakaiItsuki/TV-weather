@@ -1,38 +1,57 @@
-html,body, div, p, span, h1, h2, ul, ol, li, dl, dt, dd { margin: 0; padding: 0; width:100%;user-select: none;}
+html,
+body,
+div,
+p,
+span,
+h1,
+h2,
+ul,
+ol,
+li,
+dl,
+dt,
+dd {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    user-select: none;
+}
 
-body{
+body {
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
     height: 100dvh;
-    color:#1a1a1a;
+    color: #1a1a1a;
     background-color: #f3f3f3;
 }
-#menuArea{
+
+#menuArea {
     width: 30%;
     padding: 10px;
 }
-#detailesArea{
+
+#detailesArea {
     width: 70%;
     position: relative;
 }
 
 
-#chitenAreaContents{
+#chitenAreaContents {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     height: 100dvh;
-    color:#1a1a1a;
+    color: #1a1a1a;
     position: relative;
 }
 
-#ichiAreaContents{
+#ichiAreaContents {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     height: 100dvh;
-    color:#1a1a1a;
+    color: #1a1a1a;
     position: relative;
 }
 
@@ -40,71 +59,71 @@ body{
 
 
 
-h1{
+h1 {
     width: 100%;
 }
 
-#menuArea h1{
+#menuArea h1 {
     margin-bottom: 30px;
 }
 
 
 
 
-p{
+p {
     width: 100%;
-    color:#5c5c5c
+    color: #5c5c5c;
 }
 
-#menuArea p{
-    color:#1a1a1a;
+#menuArea p {
+    color: #1a1a1a;
 }
 
-.detailesAreaContents{
+.detailesAreaContents {
     max-width: 700px;
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
-#topArea{
+#topArea {
     padding: 10px;
     background-color: #f3f3f3;
     display: flex;
     flex-direction: column;
     height: 80px;
-    color:#1a1a1a;
+    color: #1a1a1a;
     width: auto;
 }
 
-#centerArea{
-    background-color:#f3f3f3;
+#centerArea {
+    background-color: #f3f3f3;
     display: flex;
     flex: 1;
     height: auto;
     overflow-y: scroll;
 }
 
-#bottomArea{
+#bottomArea {
     background-color: #f3f3f3;
     display: flex;
     padding: 10px;
     height: 40px;
     flex-direction: row-reverse;
-    color:#5c5c5c;
+    color: #5c5c5c;
     width: 100%;
 }
 
-#bottomArea p{
+#bottomArea p {
     width: auto;
     height: 100%;
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 150px;
 }
 
-#resetListCheck{
+#resetListCheck {
     position: absolute;
     left: 10px;
     bottom: 10px;
@@ -112,17 +131,18 @@ p{
     height: auto;
     font-size: 20px;
     background-color: #fefefe;
-    color:#1a1a1a;
+    color: #1a1a1a;
     border-radius: 5px;
     border: 0.5px solid #cecece;
     font-size: 15px;
     padding: 5px 15px 5px 15px;
 }
-#resetListCheck:hover{
+
+#resetListCheck:hover {
     background-color: #f8f8f8;
 }
 
-#setListCheck{
+#setListCheck {
     position: absolute;
     right: 10px;
     bottom: 10px;
@@ -130,95 +150,97 @@ p{
     height: auto;
     font-size: 20px;
     background-color: #005fba;
-    color:#ffffff;
+    color: #ffffff;
     border-radius: 5px;
     border: 0.5px solid #0f4273;
     font-size: 15px;
     padding: 5px 15px 5px 15px;
 }
 
-#setListCheck:hover{
+#setListCheck:hover {
     background-color: #196ec0;
 }
 
-.centername{
+.centername {
     display: flex;
     flex-direction: row;
     vertical-align: middle;
 }
 
-.centername p{
+.centername p {
     width: 90%;
     height: 20px;
     margin: 15px;
 }
 
-.td_list{
+.td_list {
     display: flex;
     flex-direction: row;
     vertical-align: middle;
 }
 
-.td_list p{
+.td_list p {
     width: 90%;
     height: 20px;
     margin: 15px;
-    color:#1a1a1a;
+    color: #1a1a1a;
 }
 
-.td_list:hover{
+.td_list:hover {
     background-color: #f6f6f6;
 }
 
 ::-webkit-scrollbar {
     width: 5px;
-  }
-  ::-webkit-scrollbar-track {
+}
+
+::-webkit-scrollbar-track {
     background: #f3f3f3;
     border-radius: 10px;
-  }
-  ::-webkit-scrollbar-thumb {
+}
+
+::-webkit-scrollbar-thumb {
     background: #1a1a1a;
     border-radius: 10px;
-  }
+}
 
-#menuAreaDisplay{
+#menuAreaDisplay {
     max-width: 300px;
 }
 
-#chitenListCheck{
+#chitenListCheck {
     background-color: #ededed;
 }
 
-.fluentButton{
+.fluentButton {
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
     height: 50px;
-    color:#1a1a1a;
+    color: #1a1a1a;
     background-color: #f3f3f3;
     border-radius: 5px;
     margin: 5px;
-    
+
 }
 
 /* .fluentButton:hover{
     background-color: #ededed;
 } */
 
-.fluentImgArea{
+.fluentImgArea {
     display: flex;
     width: 10%;
     align-items: center;
     justify-content: center;
 }
 
-.fluentImg{
+.fluentImg {
     height: 20px;
     margin-left: 20px;
 }
 
-.fluentButton p{
+.fluentButton p {
     display: flex;
     width: 90%;
     align-items: center;
@@ -226,11 +248,12 @@ p{
     margin-left: 20px;
 }
 
-#gamen_png{
+#gamen_png {
     max-width: 500px;
     margin: 20px;
 }
-input[type="number"]{
+
+input[type="number"] {
     width: 100px;
     height: 30px;
     font-size: 18px;
@@ -238,38 +261,190 @@ input[type="number"]{
     border-radius: 5px;
     margin: 10px;
 }
-#buttonarea{
+
+#buttonarea {
     width: auto;
     padding: 10px 0px 10px 0px;
     display: flex;
     justify-content: space-between;
 }
-#setichiCheck{
+
+#setichiCheck {
     width: auto;
     height: auto;
     font-size: 20px;
     background-color: #005fba;
-    color:#ffffff;
+    color: #ffffff;
     border-radius: 5px;
     border: 0.5px solid #0f4273;
     font-size: 15px;
     padding: 5px 15px 5px 15px;
 }
-#setichiCheck:hover{
+
+#setichiCheck:hover {
     background-color: #196ec0;
 }
 
-#resetichiCheck{
+#resetichiCheck {
     width: auto;
     height: auto;
     font-size: 20px;
     background-color: #fefefe;
-    color:#1a1a1a;
+    color: #1a1a1a;
     border-radius: 5px;
     border: 0.5px solid #cecece;
     font-size: 15px;
     padding: 5px 15px 5px 15px;
 }
-#resetichiCheck:hover{
+
+#resetichiCheck:hover {
     background-color: #f8f8f8;
+}
+
+.td_list {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: solid 0.5px #e7e3ea;
+    background-color: #fbfbfb;
+    border-radius: 10px;
+    margin: 1px;
+}
+
+td {
+    margin: 0;
+    /* border-collapse: collapse;
+    border-spacing: 0;
+    border: solid 0.5px rgba(0,0,0,0);
+    background-color:#f6f6f6;
+    border-radius: 10px; */
+}
+
+th {
+    margin: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-top: solid 4px #f3f3f3;
+    background-color: #f3f3f3;
+    color: #1a1a1a;
+    padding: 10px;
+}
+
+input[type="checkbox"] {
+    accent-color: #196ec0;
+    width: 20px;
+    height: 20px;
+    margin: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #ffffff;
+        background-color: #202020;
+    }
+
+    p {
+        color: #d0d0d0;
+    }
+
+    #chitenAreaContents {
+        color: #ffffff;
+    }
+
+    #ichiAreaContents {
+        color: #ffffff;
+    }
+
+    .fluentButton {
+        background-color: #2b2b2b;
+    }
+
+    #menuArea p {
+        color: #ffffff;
+    }
+
+    #centerArea {
+        background-color: #202020;
+    }
+
+    #bottomArea {
+        background-color: #202020;
+    }
+
+    #chitenListCheck {
+        background-color: #2b2b2b;
+    }
+
+    #topArea {
+        color: #ffffff;
+        background-color: #202020;
+    }
+
+    .td_list:hover {
+        background-color: #323232;
+    }
+
+    .areaList {
+        background-color: #202020;
+    }
+
+    .td_list {
+        background-color: #2b2b2b;
+    }
+
+    .td_list p {
+        color: #ffffff;
+    }
+
+
+
+    .centername {
+        background-color: #202020;
+        color: #ffffff;
+    }
+
+    .td_list {
+        border: solid 0.5px #2b2b2b;
+        background-color: #2b2b2b;
+    }
+
+    th {
+        border-top: solid 4px #202020;
+        background-color: #202020;
+        color: #ffffff;
+    }
+
+    input[type="checkbox"] {
+        color: #202020;
+    }
+
+    #resetListCheck {
+        background-color: #2b2b2b;
+        color: #ffffff;
+        border: 0.5px solid #2b2b2b;
+    }
+
+    #resetichiCheck {
+        background-color: #2b2b2b;
+        color: #ffffff;
+        border: 0.5px solid #2b2b2b;
+    }
+
+    #resetListCheck:hover {
+        background-color: #3c3c3c;
+    }
+
+    #resetichiCheck:hover {
+        background-color: #3c3c3c;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #202020;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #9f9f9f;
+        border-radius: 10px;
+    }
+
 }

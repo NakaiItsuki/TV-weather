@@ -1,11 +1,13 @@
 const path = require('node:path');
-const { BrowserWindow, app, ipcMain } = require('electron');
+const { BrowserWindow, app, ipcMain, screen  } = require('electron');
 
 
 app.whenReady().then(() => {
   // メインウィンドウ
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width, height } = primaryDisplay.workAreaSize;
   const mainWindow = new BrowserWindow({
-    width: 1920, height: 1080,resizable: false, useContentSize:false,transparent: true, frame: false,toolbar: false,alwaysOnTop: true,
+    width: width, height: height,resizable: false, useContentSize:false,transparent: true, frame: false,toolbar: false,alwaysOnTop: true,
     webPreferences: {
       preload: path.resolve(__dirname, 'preload.js'),
     },
