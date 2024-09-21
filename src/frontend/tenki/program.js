@@ -69,6 +69,39 @@ $(function () {
     var loadflag = 0;
 
     function putsWeather() {
+        const weatherMapping = {
+            "100": 100, "123": 100, "124": 100, "130": 100, "131": 100,//晴れ
+            "101": 101, "132": 101,//晴れ時々くもり
+            "102": 102, "103": 102, "106": 102, "107": 102, "108": 102, "120": 102, "140": 102,//晴れ時々雨
+            "104": 104, "105": 104, "160": 104, "170": 104,//晴れ時々雪
+            "110": 110, "111": 110,//晴れのちくもり
+            "112": 112, "113": 112, "114": 112, "118": 112, "119": 112, "122": 112, "125": 112,//晴れのち雨
+            "126": 112, "127": 112, "128": 112, "129": 112,//晴れのち雨
+            "115": 115, "116": 115, "117": 115,//晴れのち雪
+            "200": 200, "209": 200, "231": 200,//くもり
+            "201": 201, "223": 201,//くもり時々晴れ
+            "202": 202, "203": 202, "206": 202, "207": 202, "208": 202, "220": 202, "240": 202,//くもり時々雨
+            "204": 204, "205": 204, "250": 204, "260": 204, "270": 204,//くもり時々雪
+            "210": 210, "211": 210,//くもりのち晴れ
+            "212": 212, "213": 212, "214": 212, "218": 212, "219": 212, "222": 212,//くもりのち雨
+            "224": 212, "225": 212, "226": 212, "227": 212,//くもりのち雨
+            "215": 215, "216": 215, "217": 215, "228": 215, "229": 215, "230": 215, "281": 215,//くもりのち雪
+            "300": 300, "306": 300, "307": 300, "308": 300, "328": 300, "350": 300,//雨
+            "301": 301,//雨時々晴れ
+            "302": 302,//雨時々くもり
+            "303": 303, "304": 303, "309": 303, "322": 303, "329": 303,//雨時々雪
+            "311": 311, "316": 311, "320": 311, "323": 311, "324": 311, "325": 311,//雨のち晴れ
+            "313": 313, "317": 313, "321": 313, "221": 313,//雨のちくもり
+            "314": 314, "315": 314, "326": 314, "327": 314,//雨のち雪
+            "400": 400, "405": 400, "406": 400, "407": 400, "450": 400, "425": 400,//雪
+            "401": 401,//雪時々晴れ
+            "402": 402,//雪時々くもり
+            "340": 403, "403": 403, "409": 403, "427": 403,//雪時々雨
+            "361": 411, "411": 411, "420": 411,//雪のち晴れ
+            "371": 413, "413": 413, "421": 413,//雪のちくもり
+            "414": 414, "422": 414, "423": 414, "424": 414, "426": 414//雪のち雨
+        };
+        
         nowTime = new Date();
         nowHour = nowTime.getHours();
         nowMin = nowTime.getMinutes();
@@ -97,214 +130,9 @@ $(function () {
             $('#pop1').append(Math.round(array[i].npop1));
             $('#pop2').empty();
             $('#pop2').append(Math.round(array[i].npop2));
-            switch (array[i].ntenki) {
-                //晴れ
-                case "100":
-                case "123":
-                case "124":
-                case "130":
-                case "131":
-                    tenkimode = 100;
-                    break;
-                //晴れ時々くもり
-                case "101":
-                case "132":
-                    tenkimode = 101;
-                    break;
-                //晴れ時々雨
-                case "102":
-                case "103":
-                case "106":
-                case "107":
-                case "108":
-                case "120":
-                case "140":
-                    tenkimode = 102;
-                    break;
-                //晴れ時々雪
-                case "104":
-                case "105":
-                case "160":
-                case "170":
-                    tenkimode = 104;
-                    break;
-                //晴れのちくもり
-                case "110":
-                case "111":
-                    tenkimode = 110;
-                    break;
-                //晴れのち雨
-                case "112":
-                case "113":
-                case "114":
-                case "118":
-                case "119":
-                case "122":
-                case "125":
-                case "126":
-                case "127":
-                case "128":
-                case "129":
-                    tenkimode = 112;
-                    break;
-                //晴れのち雪
-                case "115":
-                case "116":
-                case "117":
-                    tenkimode = 115;
-                    break;
-                //くもり
-                case "200":
-                case "209":
-                case "231":
-                    tenkimode = 200;
-                    break;
-                //くもり時々晴れ
-                case "201":
-                case "223":
-                    tenkimode = 201;
-                    break;
-                //くもり時々雨
-                case "202":
-                case "202":
-                case "203":
-                case "206":
-                case "207":
-                case "208":
-                case "220":
-                case "240":
-                    tenkimode = 202;
-                    break;
-                //くもり時々雪
-                case "204":
-                case "205":
-                case "250":
-                case "260":
-                case "270":
-                    tenkimode = 204;
-                    break;
-                //くもりのち晴れ
-                case "210":
-                case "211":
-                    tenkimode = 210;
-                    break;
-                //くもりのち雨
-                case "212":
-                case "213":
-                case "214":
-                case "218":
-                case "219":
-                case "222":
-                case "224":
-                case "225":
-                case "226":
-                case "227":
-                    tenkimode = 212;
-                    break;
-                //くもりのち雪
-                case "215":
-                case "216":
-                case "217":
-                case "228":
-                case "229":
-                case "230":
-                case "281":
-                    tenkimode = 215;
-                    break;
-                //雨
-                case "300":
-                case "306":
-                case "307":
-                case "308":
-                case "328":
-                case "350":
-                    tenkimode = 300;
-                    break;
-                //雨時々晴れ
-                case "301":
-                    tenkimode = 301;
-                    break;
-                //雨時々くもり
-                case "302":
-                    tenkimode = 302;
-                    break;
-                //雨時々雪
-                case "303":
-                case "304":
-                case "309":
-                case "322":
-                case "329":
-                    tenkimode = 303;
-                    break;
-                //雨のち晴れ
-                case "311":
-                case "316":
-                case "320":
-                case "323":
-                case "324":
-                case "325":
-                    tenkimode = 311;
-                    break;
-                //雨のちくもり
-                case "313":
-                case "317":
-                case "321":
-                case "221":
-                    tenkimode = 313;
-                    break;
-                //雨のち雪
-                case "314":
-                case "315":
-                case "326":
-                case "327":
-                    tenkimode = 314;
-                    break;
-                //雪
-                case "400":
-                case "405":
-                case "406":
-                case "407":
-                case "450":
-                case "425":
-                    tenkimode = 400;
-                    break;
-                //雪時々晴れ
-                case "401":
-                    tenkimode = 401;
-                    break;
-                //雪時々くもり
-                case "402":
-                    tenkimode = 402;
-                    break;
-                //雪時々雨
-                case "340":
-                case "403":
-                case "409":
-                case "427":
-                    tenkimode = 403;
-                    break;
-                //雪のち晴れ
-                case "361":
-                case "411":
-                case "420":
-                    tenkimode = 411;
-                    break;
-                //雪のちくもり
-                case "371":
-                case "413":
-                case "421":
-                    tenkimode = 413;
-                    break;
-                //雪のち雨
-                case "414":
-                case "422":
-                case "423":
-                case "424":
-                case "426":
-                    tenkimode = 414;
-                    break;
-
-            }
+            // switch (array[i].ntenki) {
+            tenkimode = weatherMapping[array[i].ntenki] || null;
+            
         } else {
             $('#asuarea').empty();
             $('#ltmparea').empty();
@@ -317,214 +145,7 @@ $(function () {
             $('#pop1').append(Math.round(array[i].pop1));
             $('#pop2').empty();
             $('#pop2').append(Math.round(array[i].pop2));
-            switch (array[i].tenki) {
-                //晴れ
-                case "100":
-                case "123":
-                case "124":
-                case "130":
-                case "131":
-                    tenkimode = 100;
-                    break;
-                //晴れ時々くもり
-                case "101":
-                case "132":
-                    tenkimode = 101;
-                    break;
-                //晴れ時々雨
-                case "102":
-                case "103":
-                case "106":
-                case "107":
-                case "108":
-                case "120":
-                case "140":
-                    tenkimode = 102;
-                    break;
-                //晴れ時々雪
-                case "104":
-                case "105":
-                case "160":
-                case "170":
-                    tenkimode = 104;
-                    break;
-                //晴れのちくもり
-                case "110":
-                case "111":
-                    tenkimode = 110;
-                    break;
-                //晴れのち雨
-                case "112":
-                case "113":
-                case "114":
-                case "118":
-                case "119":
-                case "122":
-                case "125":
-                case "126":
-                case "127":
-                case "128":
-                case "129":
-                    tenkimode = 112;
-                    break;
-                //晴れのち雪
-                case "115":
-                case "116":
-                case "117":
-                    tenkimode = 115;
-                    break;
-                //くもり
-                case "200":
-                case "209":
-                case "231":
-                    tenkimode = 200;
-                    break;
-                //くもり時々晴れ
-                case "201":
-                case "223":
-                    tenkimode = 201;
-                    break;
-                //くもり時々雨
-                case "202":
-                case "202":
-                case "203":
-                case "206":
-                case "207":
-                case "208":
-                case "220":
-                case "240":
-                    tenkimode = 202;
-                    break;
-                //くもり時々雪
-                case "204":
-                case "205":
-                case "250":
-                case "260":
-                case "270":
-                    tenkimode = 204;
-                    break;
-                //くもりのち晴れ
-                case "210":
-                case "211":
-                    tenkimode = 210;
-                    break;
-                //くもりのち雨
-                case "212":
-                case "213":
-                case "214":
-                case "218":
-                case "219":
-                case "222":
-                case "224":
-                case "225":
-                case "226":
-                case "227":
-                    tenkimode = 212;
-                    break;
-                //くもりのち雪
-                case "215":
-                case "216":
-                case "217":
-                case "228":
-                case "229":
-                case "230":
-                case "281":
-                    tenkimode = 215;
-                    break;
-                //雨
-                case "300":
-                case "306":
-                case "307":
-                case "308":
-                case "328":
-                case "350":
-                    tenkimode = 300;
-                    break;
-                //雨時々晴れ
-                case "301":
-                    tenkimode = 301;
-                    break;
-                //雨時々くもり
-                case "302":
-                    tenkimode = 302;
-                    break;
-                //雨時々雪
-                case "303":
-                case "304":
-                case "309":
-                case "322":
-                case "329":
-                    tenkimode = 303;
-                    break;
-                //雨のち晴れ
-                case "311":
-                case "316":
-                case "320":
-                case "323":
-                case "324":
-                case "325":
-                    tenkimode = 311;
-                    break;
-                //雨のちくもり
-                case "313":
-                case "317":
-                case "321":
-                case "221":
-                    tenkimode = 313;
-                    break;
-                //雨のち雪
-                case "314":
-                case "315":
-                case "326":
-                case "327":
-                    tenkimode = 314;
-                    break;
-                //雪
-                case "400":
-                case "405":
-                case "406":
-                case "407":
-                case "450":
-                case "425":
-                    tenkimode = 400;
-                    break;
-                //雪時々晴れ
-                case "401":
-                    tenkimode = 401;
-                    break;
-                //雪時々くもり
-                case "402":
-                    tenkimode = 402;
-                    break;
-                //雪時々雨
-                case "340":
-                case "403":
-                case "409":
-                case "427":
-                    tenkimode = 403;
-                    break;
-                //雪のち晴れ
-                case "361":
-                case "411":
-                case "420":
-                    tenkimode = 411;
-                    break;
-                //雪のちくもり
-                case "371":
-                case "413":
-                case "421":
-                    tenkimode = 413;
-                    break;
-                //雪のち雨
-                case "414":
-                case "422":
-                case "423":
-                case "424":
-                case "426":
-                    tenkimode = 414;
-                    break;
-
-            }
+            tenkimode = weatherMapping[array[i].tenki] || null;
         }
 
 

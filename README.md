@@ -5,3 +5,8 @@
 ```
 npx electron-builder
 ```
+
+## Debug
+```
+electron . --enable-logging
+```
