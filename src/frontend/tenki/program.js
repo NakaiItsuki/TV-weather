@@ -1,42 +1,35 @@
 $(function () {
     window.myAPI.openWindow();
-    var urls = [];
-    urls[0] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/016000.json", "0"];
-    urls[1] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/040000.json", "0"];
-    urls[2] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/150000.json", "0"];
-    urls[3] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/130000.json", "0"];
-    urls[4] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/230000.json", "0"];
-    urls[5] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/270000.json", "0"];
-    urls[6] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/340000.json", "0"];
-    urls[7] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/400000.json", "0"];
 
-    var array = [];
-    var childarray = [];
+    //表示する地点の初期値を設定
+    const baseUrl = "https://www.jma.go.jp/bosai/forecast/data/forecast/";
+    const locations = ["016000", "040000", "150000", "130000", "230000", "270000", "340000", "400000"];
+    var urls = locations.map(location => [`${baseUrl}${location}.json`, "0"]);
 
-    init();
+
+    var weather_data = [];//気象庁のサーバから取得した情報を格納する
+    let currentIndex = 0;//表示する地点を指定する配列のインデックス
+
+    init();//初期化
 
 
     function init(){
-        var serializedArray = window.localStorage.getItem('urldata');
-        var xnumdata = window.localStorage.getItem('tenkixnum');
-        var ynumdata = window.localStorage.getItem('tenkiynum');
-        if (xnumdata != null) {
-            $('#tenki').css('left', xnumdata + 'px');
-            $('#tenki').css('top', ynumdata + 'px');
+        var serializedArray = window.localStorage.getItem('urldata');//以前に選択済みの地点の情報を取得する
+        var x_value = window.localStorage.getItem('tenkixnum');//以前に設定済みの天気ループの表示位置（X軸）を取得する
+        var y_value = window.localStorage.getItem('tenkiynum');//以前に設定済みの天気ループの表示位置（Y軸）を取得する
+        if (x_value != null) {//以前に表示位置が設定されていた場合
+            $('#tenki').css('left', x_value + 'px');//X軸のCSSの情報を更新
+            $('#tenki').css('top', y_value + 'px');//Y軸のCSSの情報を更新
         }
 
-        if (serializedArray != null) {
-            var getValue = JSON.parse(serializedArray);
-            urls = [];
-            urls = getValue;
+        if (serializedArray != null) {//以前に表示する地点を設定されていた場合
+            urls = JSON.parse(serializedArray);//json形式で保存されているURLの情報を取得する
         }
-        loadjson();
+        loadjson();//気象庁のサーバからjsonデータを取得する
     }
 
     function loadjson() {
-        array = [];
-        i = 0;
-        for (var t = 0; t < urls.length; t++) {
+        for (let t = 0; t < urls.length; t++) {
             try {
                 var jsonData = fetchJsonSync(urls[t][0]);
                 formatWeather(jsonData, Number(urls[t][1]));
@@ -45,7 +38,7 @@ $(function () {
             }
         }
     }
-    
+
     function fetchJsonSync(url) {
         var request = new XMLHttpRequest();
         request.open('GET', url, false);
@@ -58,63 +51,50 @@ $(function () {
         }
     }
 
-    function showWeather() {
-        nowTime = new Date();
-        nowHour = nowTime.getHours();
-        let loadflag = 0;
-        if (nowHour == 0 && loadflag == 0) {
-            loadjson();
-            loadflag = 1;
-        }
-        if (nowHour == 1 && loadflag == 1) {
-            loadflag = 0;
-        }
+    function showWeather(index) {
+        let nowTime = new Date();
+        let nowHour = nowTime.getHours();
 
         if (nowHour >= 17) {
-            updateWeatherForTomorrow();
+            updateWeatherForTomorrow(index);
         } else {
-            updateWeatherForToday();
+            updateWeatherForToday(index);
         }
         animateWeatherIcon();
-        if (i > array.length - 2) {
-            i = 0;
-        } else {
-            i++;
-        }
     }
 
-    function updateWeatherForToday() {
+    function updateWeatherForToday(i) {
         $('#asuarea').empty();
         $('#ltmparea').empty();
         $('#ltmparea').append('<style>#tenki{opacity:1;}#tr2{opacity:0;}#htmp{top:5px;}#hp{top:30px;}</style>');
         $('#chiten').empty();
-        $('#chiten').append(array[i].area);
+        $('#chiten').append(weather_data[i].area);
         $('#htmp').empty();
-        $('#htmp').append(Math.round(array[i].htmp));
+        $('#htmp').append(Math.round(weather_data[i].htmp));
         $('#pop1').empty();
-        $('#pop1').append(Math.round(array[i].pop1));
+        $('#pop1').append(Math.round(weather_data[i].pop1));
         $('#pop2').empty();
-        $('#pop2').append(Math.round(array[i].pop2));
-        tenkimode = getWeatherMode(array[i].tenki);
+        $('#pop2').append(Math.round(weather_data[i].pop2));
+        tenkimode = getWeatherMode(weather_data[i].tenki);
     }
 
-    function updateWeatherForTomorrow() {
+    function updateWeatherForTomorrow(i) {
         $('#asuarea').empty();
         $('#asuarea').append('<div id="asu">あす</div>');
         $('#ltmparea').empty();
         $('#ltmparea').append('<style>#tenki{opacity:1;}#pop1{font-size:30px;right:190px;top:130px;}#pop2{font-size:30px;right:120px;top:130px;}#htmp{right:105px;}#hp{left:200px;}#tr,#tp2{opacity:0;}#tp{top:145px;right:130px;}</style>');
         $('#ltmparea').append('<div id="lp">℃</div><div id="ltmp"></div>');
         $('#chiten').empty();
-        $('#chiten').append(array[i].area);
+        $('#chiten').append(weather_data[i].area);
         $('#htmp').empty();
-        $('#htmp').append(Math.round(array[i].nhtmp));
+        $('#htmp').append(Math.round(weather_data[i].nhtmp));
         $('#ltmp').empty();
-        $('#ltmp').append(Math.round(array[i].nltmp));
+        $('#ltmp').append(Math.round(weather_data[i].nltmp));
         $('#pop1').empty();
-        $('#pop1').append(Math.round(array[i].npop1));
+        $('#pop1').append(Math.round(weather_data[i].npop1));
         $('#pop2').empty();
-        $('#pop2').append(Math.round(array[i].npop2));
-        tenkimode = getWeatherMode(array[i].ntenki);
+        $('#pop2').append(Math.round(weather_data[i].npop2));
+        tenkimode = getWeatherMode(weather_data[i].ntenki);
     }
 
     function animateWeatherIcon() {
@@ -179,7 +159,6 @@ $(function () {
         const serializedArray = JSON.stringify(urls);
         window.localStorage.setItem('urldata', serializedArray);
         array = [];
-
     }
 
     function formatWeather(weather, num) {
@@ -210,12 +189,13 @@ $(function () {
             ltmp = dd;
         }
 
-        childarray = { area: area, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };
-        array[array.length] = childarray;
+        var childarray = { area: area, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };
+        weather_data[weather_data.length] = childarray;
     }
 
     setInterval(() => {
-        showWeather();
+        showWeather(currentIndex);//指定したインデックスの地点の天気を表示
+        currentIndex = (currentIndex + 1) % weather_data.length; // インデックスをリセットしてループさせる
     }, 5000);
 
     setInterval(() => {

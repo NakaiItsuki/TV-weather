@@ -61,9 +61,9 @@ $(function () {
         for (var i = 0; i < area_len; i++) {
             var area = weather[0].timeSeries[2].areas[i].area.name;
             var tmp = [name, area, code, i];
-            console.log(tmp);
+            // console.log(tmp);
             var val = code + String(i);
-            console.log(val);
+            // console.log(val);
             $(".areaList").append("<tr><td class='centername'><div class='td_list'><p>" + area + "</p><input type='checkbox' name='check4' class='checkbox' id=" + val + " value=" + val + " /></div></td></tr>");
         }
 
