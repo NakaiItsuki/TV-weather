@@ -1,9 +1,5 @@
 $(function () {
-
     window.myAPI.openWindow();
-
-
-
     var urls = [];
     urls[0] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/016000.json", "0"];
     urls[1] = ["https://www.jma.go.jp/bosai/forecast/data/forecast/040000.json", "0"];
@@ -17,23 +13,26 @@ $(function () {
     var array = [];
     var childarray = [];
 
-    var tenkimode = 100;
+    init();
 
-    var nowTime;
-    var nowHour;
-    var nowMin;
-    var nowSec;
 
-    var i = 0;
-    var j = 0;
+    function init(){
+        var serializedArray = window.localStorage.getItem('urldata');
+        var xnumdata = window.localStorage.getItem('tenkixnum');
+        var ynumdata = window.localStorage.getItem('tenkiynum');
+        if (xnumdata != null) {
+            $('#tenki').css('left', xnumdata + 'px');
+            $('#tenki').css('top', ynumdata + 'px');
+        }
 
-    var xnumdata = window.localStorage.getItem('tenkixnum');
-    var ynumdata = window.localStorage.getItem('tenkiynum');
-
-    if (xnumdata != null) {
-        $('#tenki').css('left', xnumdata + 'px');
-        $('#tenki').css('top', ynumdata + 'px');
+        if (serializedArray != null) {
+            var getValue = JSON.parse(serializedArray);
+            urls = [];
+            urls = getValue;
+        }
+        loadjson();
     }
+
     function loadjson() {
         array = [];
         i = 0;
@@ -46,6 +45,7 @@ $(function () {
             }
         }
     }
+    
     function fetchJsonSync(url) {
         var request = new XMLHttpRequest();
         request.open('GET', url, false);
@@ -57,18 +57,80 @@ $(function () {
             throw new Error(`Failed to fetch data: ${request.status}`);
         }
     }
-    var serializedArray = window.localStorage.getItem('urldata');
 
-    if (serializedArray != null) {
-        var getValue = JSON.parse(serializedArray);
-        urls = [];
-        urls = getValue;
+    function showWeather() {
+        nowTime = new Date();
+        nowHour = nowTime.getHours();
+        let loadflag = 0;
+        if (nowHour == 0 && loadflag == 0) {
+            loadjson();
+            loadflag = 1;
+        }
+        if (nowHour == 1 && loadflag == 1) {
+            loadflag = 0;
+        }
+
+        if (nowHour >= 17) {
+            updateWeatherForTomorrow();
+        } else {
+            updateWeatherForToday();
+        }
+        animateWeatherIcon();
+        if (i > array.length - 2) {
+            i = 0;
+        } else {
+            i++;
+        }
     }
-    loadjson();
 
-    var loadflag = 0;
+    function updateWeatherForToday() {
+        $('#asuarea').empty();
+        $('#ltmparea').empty();
+        $('#ltmparea').append('<style>#tenki{opacity:1;}#tr2{opacity:0;}#htmp{top:5px;}#hp{top:30px;}</style>');
+        $('#chiten').empty();
+        $('#chiten').append(array[i].area);
+        $('#htmp').empty();
+        $('#htmp').append(Math.round(array[i].htmp));
+        $('#pop1').empty();
+        $('#pop1').append(Math.round(array[i].pop1));
+        $('#pop2').empty();
+        $('#pop2').append(Math.round(array[i].pop2));
+        tenkimode = getWeatherMode(array[i].tenki);
+    }
 
-    function putsWeather() {
+    function updateWeatherForTomorrow() {
+        $('#asuarea').empty();
+        $('#asuarea').append('<div id="asu">あす</div>');
+        $('#ltmparea').empty();
+        $('#ltmparea').append('<style>#tenki{opacity:1;}#pop1{font-size:30px;right:190px;top:130px;}#pop2{font-size:30px;right:120px;top:130px;}#htmp{right:105px;}#hp{left:200px;}#tr,#tp2{opacity:0;}#tp{top:145px;right:130px;}</style>');
+        $('#ltmparea').append('<div id="lp">℃</div><div id="ltmp"></div>');
+        $('#chiten').empty();
+        $('#chiten').append(array[i].area);
+        $('#htmp').empty();
+        $('#htmp').append(Math.round(array[i].nhtmp));
+        $('#ltmp').empty();
+        $('#ltmp').append(Math.round(array[i].nltmp));
+        $('#pop1').empty();
+        $('#pop1').append(Math.round(array[i].npop1));
+        $('#pop2').empty();
+        $('#pop2').append(Math.round(array[i].npop2));
+        tenkimode = getWeatherMode(array[i].ntenki);
+    }
+
+    function animateWeatherIcon() {
+        $('.mark').css('opacity', 0);
+        $('#m' + tenkimode).css('opacity', 1).animate({ paddingRight: 1 }, {
+            duration: 1000,
+            step: function (now) {
+                $(this).css({ transform: 'scale(' + now + ')' });
+            },
+            complete: function () {
+                $('#m' + tenkimode).css('paddingRight', 0);
+            }
+        });
+    }
+
+    function getWeatherMode(code) {
         const weatherMapping = {
             "100": 100, "123": 100, "124": 100, "130": 100, "131": 100,//晴れ
             "101": 101, "132": 101,//晴れ時々くもり
@@ -101,79 +163,10 @@ $(function () {
             "371": 413, "413": 413, "421": 413,//雪のちくもり
             "414": 414, "422": 414, "423": 414, "424": 414, "426": 414//雪のち雨
         };
-        
-        nowTime = new Date();
-        nowHour = nowTime.getHours();
-        nowMin = nowTime.getMinutes();
-        nowSec = nowTime.getSeconds();
-        if (nowHour == 0 && loadflag == 0) {
-            loadjson();
-            loadflag = 1;
-        }
-        if (nowHour == 1 && loadflag == 1) {
-            loadflag = 0;
-        }
-
-        if (nowHour >= 17) {
-            $('#asuarea').empty();
-            $('#asuarea').append('<div id="asu">あす</div>');
-            $('#ltmparea').empty();
-            $('#ltmparea').append('<style>#tenki{opacity:1;}#pop1{font-size:30px;right:190px;top:130px;}#pop2{font-size:30px;right:120px;top:130px;}#htmp{right:105px;}#hp{left:200px;}#tr,#tp2{opacity:0;}#tp{top:145px;right:130px;}</style>');
-            $('#ltmparea').append('<div id="lp">℃</div><div id="ltmp"></div>');
-            $('#chiten').empty();
-            $('#chiten').append(array[i].area);
-            $('#htmp').empty();
-            $('#htmp').append(Math.round(array[i].nhtmp));
-            $('#ltmp').empty();
-            $('#ltmp').append(Math.round(array[i].nltmp));
-            $('#pop1').empty();
-            $('#pop1').append(Math.round(array[i].npop1));
-            $('#pop2').empty();
-            $('#pop2').append(Math.round(array[i].npop2));
-            // switch (array[i].ntenki) {
-            tenkimode = weatherMapping[array[i].ntenki] || null;
-            
-        } else {
-            $('#asuarea').empty();
-            $('#ltmparea').empty();
-            $('#ltmparea').append('<style>#tenki{opacity:1;}#tr2{opacity:0;}#htmp{top:5px;}#hp{top:30px;}</style>');
-            $('#chiten').empty();
-            $('#chiten').append(array[i].area);
-            $('#htmp').empty();
-            $('#htmp').append(Math.round(array[i].htmp));
-            $('#pop1').empty();
-            $('#pop1').append(Math.round(array[i].pop1));
-            $('#pop2').empty();
-            $('#pop2').append(Math.round(array[i].pop2));
-            tenkimode = weatherMapping[array[i].tenki] || null;
-        }
-
-
-        $('.mark').css('opacity', 0);
-        $('#m' + tenkimode).css('opacity', 1);
-        $('#m' + tenkimode).animate({ paddingRight: 1 }, {
-            //1秒かけてアニメーション
-            duration: 1000,
-            //stepは、アニメーションが進むたびに呼ばれる
-            step: function (now) {
-                //nowに現在のpadding-rightの値が渡してもらえる
-                //0から1に向かって変化していくnowを利用してscaleさせてみる
-                $(this).css({ transform: 'scale(' + now + ')' });
-            },
-            //終わったら
-            complete: function () {
-                //次のために、元に戻しておく
-                $('#m' + tenkimode).css('paddingRight', 0);
-            }
-        })
-        if (i > array.length - 2) {
-            i = 0;
-        } else {
-            i++;
-        }
+        return weatherMapping[code] || null;
     }
 
-    function reload_tenki(data) {
+    function reloadWeather(data) {
         urls = [];
         for (var i = 1; i < data.length; i++) {
             var part1 = data[i].substr(0, 6); // "100009"
@@ -219,25 +212,19 @@ $(function () {
 
         childarray = { area: area, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };
         array[array.length] = childarray;
-
     }
 
-
-
     setInterval(() => {
-        putsWeather();
+        showWeather();
     }, 5000);
-
 
     setInterval(() => {
         loadjson();
     }, 3600000);
 
     window.myAPI.onReply((e, arg) => {
-        // メインプロセスから転送されてきたメッセージを表示
-        //alert(arg);
         if (arg[0] == 1) {
-            reload_tenki(arg);
+            reloadWeather(arg);
             loadjson();
         } else if (arg[0] == 2) {
             $('#tenki').css('left', arg[1] + 'px');
@@ -245,9 +232,5 @@ $(function () {
             window.localStorage.setItem('tenkixnum', arg[1]);
             window.localStorage.setItem('tenkiynum', arg[2]);
         }
-
     });
-
-
-
 });
