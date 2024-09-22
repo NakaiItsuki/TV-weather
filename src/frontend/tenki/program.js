@@ -157,8 +157,9 @@ $(function () {
         return weatherMapping[code] || null;//本アプリ独自の天気コードを返す
     }
 
+    /* 設定画面で表示する地点を更新した際に実行する関数 */
     function reloadWeather(data) {
-        urls = [];
+        urls=[];
         for (var i = 1; i < data.length; i++) {
             var part1 = data[i].substr(0, 6); // "100009"
             var part2 = data[i].substr(6);
@@ -169,37 +170,23 @@ $(function () {
         window.localStorage.removeItem("urldata");
         const serializedArray = JSON.stringify(urls);
         window.localStorage.setItem('urldata', serializedArray);
-        array = [];
+        weather_data = [];
     }
 
-    function formatWeather(weather, num) {
-        var dd;
-        var area = weather[0].timeSeries[2].areas[num].area.name;
-        var tenki = weather[0].timeSeries[0].areas[num].weatherCodes[0];
-        var htmp = weather[0].timeSeries[2].areas[num].temps[1];
-        var ltmp = weather[0].timeSeries[2].areas[num].temps[0];
-        var pop1 = weather[0].timeSeries[1].areas[num].pops[0];
-        var pop2 = weather[0].timeSeries[1].areas[num].pops[1];
-        var ntenki = weather[0].timeSeries[0].areas[num].weatherCodes[1];
-        var nhtmp = weather[0].timeSeries[2].areas[num].temps[2];
-        var nltmp = weather[0].timeSeries[2].areas[num].temps[1];
-        var npop1 = weather[0].timeSeries[1].areas[num].pops[2];
-        var npop2 = weather[0].timeSeries[1].areas[num].pops[3];
-        if (nhtmp == null) {
-            nhtmp = weather[0].timeSeries[2].areas[num].temps[1];
-            nltmp = weather[0].timeSeries[2].areas[num].temps[0];
-        }
-        if (parseInt(nhtmp) < parseInt(nltmp)) {
-            dd = nhtmp;
-            nhtmp = nltmp;
-            nltmp = dd;
-        }
-        if (parseInt(htmp) < parseInt(ltmp)) {
-            dd = htmp;
-            htmp = ltmp;
-            ltmp = dd;
-        }
-        var childarray = { area: area, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };
+    /* 気象庁のサーバから取得したjsonデータから情報を取得する関数 */
+    function formatWeather(weather, area_index) {
+        let area_name = weather[0].timeSeries[2].areas[area_index].area.name;//地点名を取得する
+        let tenki = weather[0].timeSeries[0].areas[area_index].weatherCodes[0];//天気コードを取得する
+        let htmp = weather[0].timeSeries[2].areas[area_index].temps[1];//今日の最高気温を取得する
+        let ltmp = weather[0].timeSeries[2].areas[area_index].temps[0];//今日の最低気温を取得する
+        let pop1 = weather[0].timeSeries[1].areas[area_index].pops[0];//今日の降水確率を取得する
+        let pop2 = weather[0].timeSeries[1].areas[area_index].pops[1];//今日の降水確率を取得する
+        let ntenki = weather[0].timeSeries[0].areas[area_index].weatherCodes[1];//明日の天気コードを取得する
+        let nhtmp = weather[0].timeSeries[2].areas.find(area => area.area.name === area_name).temps[1];//明日の最高気温を取得する
+        let nltmp = weather[0].timeSeries[2].areas.find(area => area.area.name === area_name).temps[0];//明日の最低気温を取得する
+        let npop1 = weather[0].timeSeries[1].areas[area_index].pops[2];//明日の降水確率を取得する
+        let npop2 = weather[0].timeSeries[1].areas[area_index].pops[3];//明日の降水確率を取得する
+        let childarray = { area: area_name, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };//取得したデータをまとめる
         weather_data[weather_data.length] = childarray;
     }
 
@@ -209,7 +196,7 @@ $(function () {
     }, 5000);
 
     setInterval(() => {
-        loadjson();
+        loadjson();//1時間ごとにjsonを読み込む
     }, 3600000);
 
     window.myAPI.onReply((e, arg) => {
