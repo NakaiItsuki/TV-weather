@@ -171,6 +171,8 @@ $(function () {
         const serializedArray = JSON.stringify(urls);
         window.localStorage.setItem('urldata', serializedArray);
         weather_data = [];
+        currentIndex = 0;
+        $('#tenki').css('opacity', 1);
     }
 
     /* 気象庁のサーバから取得したjsonデータから情報を取得する関数 */
@@ -201,6 +203,7 @@ $(function () {
 
     window.myAPI.onReply((e, arg) => {
         if (arg[0] == 1) {
+            $('#tenki').css('opacity', 0);
             reloadWeather(arg);
             loadjson();
         } else if (arg[0] == 2) {
