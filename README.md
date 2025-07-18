@@ -10,3 +10,10 @@ npx electron-builder
 ```
 electron . --enable-logging
 ```
+
+
+## mac
+
+```
+npx electron . --enable-logging
+```

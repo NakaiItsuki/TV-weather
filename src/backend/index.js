@@ -13,7 +13,7 @@ app.whenReady().then(() => {
     },
   });
   // mainWindow 用の HTML をロード
-  mainWindow.loadFile('./src/frontend/tenki/index.html');
+  mainWindow.loadFile('./src/frontend/weather/weather.html');
   mainWindow.setIgnoreMouseEvents(true, {forward: true});
   
 

@@ -35,7 +35,7 @@ $(function () {
                         var jsonData = fetchJsonSync(url);
                         formatWeather(jsonData, center.name, code);
                     } catch (error) {
-                        console.error('データの取得に失敗しました。', error);
+                        console.error(`データの取得に失敗しました（URL: ${url}）`, error);
                     }
                 }
             }
