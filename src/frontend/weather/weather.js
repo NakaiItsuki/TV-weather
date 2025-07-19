@@ -289,4 +289,16 @@ $(function () {
             window.localStorage.setItem('tenkiynum', arg[2]);
         }
     });
+
+    if (window.myAPI && window.myAPI.onSetTenkiScale) {
+        window.myAPI.onSetTenkiScale((event, scale) => {
+            $('#tenki').css('transform', 'scale(' + scale + ')');
+        });
+    }
+
+    // ページ初期表示時にもlocalStorageの値を反映
+    $(function () {
+        const scale = window.localStorage.getItem('tenkiScale') || 1.0;
+        $('#tenki').css('transform', 'scale(' + scale + ')');
+    });
 });

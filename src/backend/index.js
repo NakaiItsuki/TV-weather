@@ -1,5 +1,5 @@
 const path = require('node:path');
-const { BrowserWindow, app, ipcMain, screen  } = require('electron');
+const { BrowserWindow, app, ipcMain, screen } = require('electron');
 
 
 app.whenReady().then(() => {
@@ -7,15 +7,15 @@ app.whenReady().then(() => {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width, height } = primaryDisplay.workAreaSize;
   const mainWindow = new BrowserWindow({
-    width: width, height: height,resizable: false, useContentSize:false,transparent: true, frame: false,toolbar: false,alwaysOnTop: true,
+    width: width, height: height, resizable: false, useContentSize: false, transparent: true, frame: false, toolbar: false, alwaysOnTop: true,
     webPreferences: {
       preload: path.resolve(__dirname, 'preload.js'),
     },
   });
   // mainWindow 用の HTML をロード
   mainWindow.loadFile('./src/frontend/weather/weather.html');
-  mainWindow.setIgnoreMouseEvents(true, {forward: true});
-  
+  mainWindow.setIgnoreMouseEvents(true, { forward: true });
+
 
   // レンダラープロセスから 'open-window' チャンネルへ着信
   ipcMain.handle('open-window', () => {
@@ -43,6 +43,19 @@ app.whenReady().then(() => {
 
   mainWindow.on('close', (event) => {
     app.quit();
+  });
+
+
+  ipcMain.handle('get-displays', () => {
+    return screen.getAllDisplays();
+  });
+
+  ipcMain.on('message', (event, arg) => {
+    if (Array.isArray(arg) && arg[0] === 'setTenkiScale') {
+      const scale = arg[1];
+      // mainWindow など weather.html を表示しているウィンドウに送信
+      mainWindow.webContents.send('setTenkiScale', scale);
+    }
   });
 
 });

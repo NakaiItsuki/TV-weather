@@ -4,4 +4,6 @@ contextBridge.exposeInMainWorld('myAPI', {
     send: (arg) => ipcRenderer.send('message', arg),
     // #4 受信 (メインプロセス -> 親ウィンドウ)
     onReply: (listener) => ipcRenderer.on('reply', listener),
+
+    getDisplays: () => ipcRenderer.invoke('get-displays'),
   });

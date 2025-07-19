@@ -36,6 +36,22 @@ body {
     position: relative;
 }
 
+input[type="button"] {
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    background-color: #005fba;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 0.5px solid #0f4273;
+    font-size: 15px;
+    padding: 5px 15px 5px 15px;
+}
+
+input[type="button"]:hover {
+    background-color: #196ec0;
+}
+
 
 #chitenAreaContents {
     box-sizing: border-box;
@@ -262,6 +278,8 @@ input[type="number"] {
     margin: 10px;
 }
 
+
+
 #buttonarea {
     width: auto;
     padding: 10px 0px 10px 0px;
@@ -336,6 +354,31 @@ input[type="checkbox"] {
     margin: 15px;
 }
 
+#displaySelect{
+    font-size: 15px;
+    padding: 8px;
+}
+
+#sizeAreaContents {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    position: relative;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#sizeAreaContents #topArea {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 80px;
+    width: auto;
+}
+#sizeAreaContents .td_list {
+    margin: 20px 10px 10px 10px;
+}
 @media (prefers-color-scheme: dark) {
     body {
         color: #ffffff;
@@ -368,10 +411,6 @@ input[type="checkbox"] {
 
     #bottomArea {
         background-color: #202020;
-    }
-
-    #chitenListCheck {
-        background-color: #3c3c3c;
     }
 
     #topArea {
@@ -441,11 +480,6 @@ input[type="checkbox"] {
     ::-webkit-scrollbar-thumb {
         background: #9f9f9f;
         border-radius: 10px;
-    }
-
-    input{
-        background: #3c3c3c;
-        color:#ffffff;
     }
 
 }

@@ -12,12 +12,22 @@
   <div id="menuArea">
     <h1>設定</h1>
     <div id="menuAreaDisplay">
-      <div class="fluentButton" id="chitenListCheck"><div class="fluentImgArea"><img class="fluentImg"src="../../../img/other/ic_fluent_location_24_filled.png"></div><p>地点</p></div>
-      <div class="fluentButton" id="ichiListCheck"><div class="fluentImgArea"><img class="fluentImg"src="../../../img/other/ic_fluent_position_forward_24_filled.png"></div><p>表示位置</p></div>
+      <div class="fluentButton" id="chitenListCheck">
+        <p>地点</p>
+      </div>
+      <div class="fluentButton" id="ichiListCheck">
+        <p>表示位置</p>
+      </div>
+      <div class="fluentButton" id="sizeListCheck">
+        <p>表示サイズ</p>
+      </div>
+      <div class="fluentButton" id="displayListCheck">
+        <p>表示ディスプレイ</p>
+      </div>
     </div>
-    
   </div>
   <div id="detailsArea">
+    <!-- 地点選択 -->
     <div class="detailesAreaContents" id="chitenAreaContents">
       <div id="topArea">
         <h1>地点</h1>
@@ -34,26 +44,51 @@
       <input id="resetListCheck" type="button" value="リセット"/>
       <input id="setListCheck" type="button" value="決定"/>
     </div>
+    <!-- 表示位置設定 -->
     <div class="detailesAreaContents" id="ichiAreaContents">
       <div id="topArea">
         <h1>表示位置</h1>
         <p>表示したい位置を設定してください</p>
       </div>
-        <!-- <img src="./gamen.png" id="gamen_png"> -->
-        <div class='td_list'>
-          <p>X軸</p>
-          <input type="number" id="inputxnum" max="1920" min="1" value="380"style="text-align:right">
-        </div>
-        <div class='td_list'>
-          <p>Y軸</p>
-          <input type="number" id="inputynum" max="1920" min="1" value="30"style="text-align:right">
-        </div>
-        <div id="buttonarea">
-          <input id="resetichiCheck" type="button" value="初期値"/>
-          <input id="setichiCheck" type="button" value="決定"/>
-          
-        </div>
-        
+      <div class='td_list'>
+        <p>X軸</p>
+        <input type="number" id="inputxnum" max="1920" min="1" value="380" style="text-align:right">
+      </div>
+      <div class='td_list'>
+        <p>Y軸</p>
+        <input type="number" id="inputynum" max="1920" min="1" value="30" style="text-align:right">
+      </div>
+      <div id="buttonarea">
+        <input id="resetichiCheck" type="button" value="初期値"/>
+        <input id="setichiCheck" type="button" value="決定"/>
+      </div>
+    </div>
+    <!-- ディスプレイ選択 -->
+    <div class="detailesAreaContents" id="displayAreaContents">
+      <div id="topArea">
+        <h1>ディスプレイ選択</h1>
+        <p>天気ループを表示するディスプレイを選択してください</p>
+      </div>
+      <select id="displaySelect">
+        <option value="">取得中...</option>
+      </select>
+      <div id="buttonarea">
+        <input id="setDisplayCheck" type="button" value="決定"/>
+      </div>
+    </div>
+    <!-- サイズ設定エリア -->
+    <div class="detailesAreaContents" id="sizeAreaContents" style="display:none;">
+      <div id="topArea">
+        <h1>表示サイズ設定</h1>
+        <p>天気ループの表示サイズを変更してください（例: 1.0=標準, 0.8=縮小, 1.5=拡大）</p>
+      </div>
+      <div class="td_list">
+        <input type="number" id="tenkiScaleInput" min="0.5" max="3.0" step="0.1" value="1.0" style="width:100px; text-align:right;">
+        <p>倍率</p>
+      </div>
+      <div id="buttonarea">
+        <input id="setTenkiScaleCheck" type="button" value="決定"/>
+      </div>
     </div>
   </div>
 </body>
