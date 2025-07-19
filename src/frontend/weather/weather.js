@@ -1,8 +1,12 @@
 $(function () {
     window.myAPI.openWindow();
 
-    init();//初期化
+    init();//初期化処理を実行
 
+    /**
+     * 初期化処理を行う関数
+     * @returns {void}
+     */
     function init() {
         //表示する地点の初期値を設定
         const baseUrl = "https://www.jma.go.jp/bosai/forecast/data/forecast/";
@@ -25,7 +29,11 @@ $(function () {
         draw(weather_datas);
     }
 
-
+    /**
+     * 天気情報を順番に表示する関数
+     * @param {Array} weather_datas - 表示する天気情報の配列
+     * @returns {void}
+     */
     function draw(weather_datas) {
         let currentIndex = 0;//表示する地点を指定する配列のインデックス
         setInterval(() => {
@@ -34,7 +42,11 @@ $(function () {
         }, 5000);
     }
 
-
+    /**
+     * 各URLから天気情報を取得し、整形して配列で返す関数
+     * @param {Array} urls - 天気情報取得用のURLとインデックスの配列
+     * @returns {Array} - 整形済み天気情報オブジェクトの配列
+     */
     function getWeatherData(urls) {
         //各urlからjsonデータを取得する
         var weather_datas = [];//気象庁のサーバから取得した情報を格納する
@@ -49,6 +61,12 @@ $(function () {
         return weather_datas
     }
 
+    /**
+     * 指定したURLからJSONデータを同期的に取得する関数
+     * @param {string} url - 取得するJSONデータのURL
+     * @returns {Object} - 取得したJSONデータ（オブジェクト）
+     * @throws {Error} - 通信エラー時
+     */
     function fetchJsonSync(url) {
         var request = new XMLHttpRequest();
         request.open('GET', url, false); // 同期リクエスト
@@ -56,6 +74,7 @@ $(function () {
             request.send();
 
             if (request.status === 200) {
+                console.log(`気象庁のサーバーからデータを取得しました: ${url}`);
                 return JSON.parse(request.responseText);
             } else {
                 throw new Error(`Failed to fetch data: ${request.status} ${request.statusText}`);
@@ -66,7 +85,33 @@ $(function () {
         }
     }
 
+    /**
+     * 天気情報を順番に表示する関数
+     * @param {Array} weather_datas - 表示する天気情報の配列
+     * @returns {void}
+     */
+    function draw(weather_datas) {
+        let currentIndex = 0;//表示する地点を指定する配列のインデックス
+
+        // weather_datasを外部から更新できるようにする
+        window.updateWeatherDatas = function (newWeatherDatas) {
+            weather_datas = newWeatherDatas;
+            currentIndex = 0; // インデックスをリセット
+        };
+
+        setInterval(() => {
+            showWeather(weather_datas[currentIndex]);//指定したインデックスの地点の天気を表示
+            currentIndex = (currentIndex + 1) % weather_datas.length; // インデックスをリセットしてループさせる
+        }, 5000);
+    }
+
+    /**
+     * 1地点分の天気情報を表示する関数
+     * @param {Object} weather_data - 1地点分の天気情報オブジェクト
+     * @returns {void}
+     */
     function showWeather(weather_data) {
+        $('#tenki').css('opacity', 1);
         let nowTime = new Date();
         let nowHour = nowTime.getHours();//時間 Hour を取得する
         //17時以降は明日の天気を表示するようにする
@@ -77,7 +122,11 @@ $(function () {
         }
     }
 
-    /* 指定した地点（配列のインデックスで指定）の「今日の天気」を表示する関数*/
+    /**
+     * 今日の天気情報を画面に表示する関数
+     * @param {Object} weather_data - 1地点分の天気情報オブジェクト
+     * @returns {void}
+     */
     function updateWeatherForToday(weather_data) {
         $('#asuarea').empty();//{id:asuarea}内の要素を削除する
         $('#ltmparea').empty();//{id:ltmparea}内の要素を削除する
@@ -94,7 +143,11 @@ $(function () {
         animateWeatherIcon(tenkimode);//天気アイコンを表示
     }
 
-    /* 指定した地点（配列のインデックスで指定）の「明日の天気」を表示する関数*/
+    /**
+     * 明日の天気情報を画面に表示する関数
+     * @param {Object} weather_data - 1地点分の天気情報オブジェクト
+     * @returns {void}
+     */
     function updateWeatherForTomorrow(weather_data) {
         $('#asuarea').empty();//{id:asuarea}内の要素を削除する
         $('#asuarea').append('<div id="asu">あす</div>');//{id:asuarea}内に「あす」と表示する
@@ -115,7 +168,11 @@ $(function () {
         animateWeatherIcon(tenkimode);//天気アイコンを表示
     }
 
-    /* 引数に指定された天気コードのアイコンを表示する関数*/
+    /**
+     * 天気アイコンをアニメーション表示する関数
+     * @param {number} tenkimode - 独自定義の天気コード
+     * @returns {void}
+     */
     function animateWeatherIcon(tenkimode) {
         $('.mark').css('opacity', 0);
         $('#m' + tenkimode).css('opacity', 1).animate({ paddingRight: 1 }, {
@@ -129,7 +186,11 @@ $(function () {
         });
     }
 
-    /* 気象庁のサーバから取得した天気コードを独自定義のコードに変換する関数*/
+    /**
+     * 気象庁の天気コードを独自定義のコードに変換する関数
+     * @param {string|number} code - 気象庁の天気コード
+     * @returns {number|null} - 独自定義の天気コード（該当しない場合はnull）
+     */
     function getWeatherMode(code) {
         const weatherMapping = {
             "100": 100, "123": 100, "124": 100, "130": 100, "131": 100,//晴れ
@@ -166,9 +227,14 @@ $(function () {
         return weatherMapping[code] || null;//本アプリ独自の天気コードを返す
     }
 
-    /* 設定画面で表示する地点を更新した際に実行する関数 */
+    /**
+     * 設定画面で表示する地点を更新した際に実行する関数
+     * @param {Array} data - 地点情報の配列（1要素目は除外、2要素目以降が対象）
+     * @returns {void}
+     */
     function reloadWeather(data) {
-        urls = [];
+        let urls = [];
+        let weather_datas = [];
         for (var i = 1; i < data.length; i++) {
             var part1 = data[i].substr(0, 6); // "100009"
             var part2 = data[i].substr(6);
@@ -179,12 +245,16 @@ $(function () {
         window.localStorage.removeItem("urldata");
         const serializedArray = JSON.stringify(urls);
         window.localStorage.setItem('urldata', serializedArray);
-        weather_data = [];
-        currentIndex = 0;
-        $('#tenki').css('opacity', 1);
+        weather_datas = getWeatherData(urls);//気象庁のサーバからjsonデータを取得する
+        window.updateWeatherDatas(weather_datas);
     }
 
-    /* 気象庁のサーバから取得したjsonデータから情報を取得する関数 */
+    /**
+     * 気象庁のサーバから取得したjsonデータから情報を取得する関数
+     * @param {Object} weather - 取得したJSONデータ
+     * @param {number} area_index - 地点のインデックス
+     * @returns {Object} - 整形済みの天気情報オブジェクト
+     */
     function formatWeather(weather, area_index) {
         let area_name = weather[0].timeSeries[2].areas[area_index].area.name;//地点名を取得する
         let tenki = weather[0].timeSeries[0].areas[area_index].weatherCodes[0];//天気コードを取得する
