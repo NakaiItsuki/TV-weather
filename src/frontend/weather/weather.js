@@ -128,6 +128,7 @@ $(function () {
      * @returns {void}
      */
     function updateWeatherForToday(weather_data) {
+        $('#tenki').css('opacity', 0);
         $('#asuarea').empty();//{id:asuarea}内の要素を削除する
         $('#ltmparea').empty();//{id:ltmparea}内の要素を削除する
         $('#ltmparea').append('<style>#tenki{opacity:1;}#tr2{opacity:0;}#htmp{top:5px;}#hp{top:30px;}</style>');//{id:ltmparea}内にCSSを追加する
@@ -140,6 +141,7 @@ $(function () {
         $('#pop2').empty();//{id:pop2}内の要素を削除する
         $('#pop2').append(Math.round(weather_data.pop2));//{id:pop2}内に降水確率を表示する
         let tenkimode = getWeatherMode(weather_data.tenki);//気象庁のサーバから取得した天気コードを変換する
+        $('#tenki').css('opacity', 1);
         animateWeatherIcon(tenkimode);//天気アイコンを表示
     }
 
