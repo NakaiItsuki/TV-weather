@@ -16,13 +16,16 @@
         <p>地点</p>
       </div>
       <div class="fluentButton" id="ichiListCheck">
-        <p>表示位置</p>
+        <p>位置</p>
       </div>
       <div class="fluentButton" id="sizeListCheck">
-        <p>表示サイズ</p>
+        <p>サイズ</p>
       </div>
       <div class="fluentButton" id="displayListCheck">
-        <p>表示ディスプレイ</p>
+        <p>ディスプレイ</p>
+      </div>
+      <div class="fluentButton" id="timerListCheck">
+        <p>タイマー</p>
       </div>
     </div>
   </div>
@@ -69,17 +72,17 @@
         <h1>ディスプレイ選択</h1>
         <p>天気ループを表示するディスプレイを選択してください</p>
       </div>
-      <select id="displaySelect">
-        <option value="">取得中...</option>
-      </select>
+      <div id="displayCardArea">
+        <!-- ここにディスプレイカードが動的に追加されます -->
+      </div>
       <div id="buttonarea">
-        <input id="setDisplayCheck" type="button" value="決定"/>
+        <input id="setDisplayCheck" type="button" value="決定" disabled/>
       </div>
     </div>
     <!-- サイズ設定エリア -->
     <div class="detailesAreaContents" id="sizeAreaContents" style="display:none;">
       <div id="topArea">
-        <h1>表示サイズ設定</h1>
+        <h1>表示サイズ</h1>
         <p>天気ループの表示サイズを変更してください（例: 1.0=標準, 0.8=縮小, 1.5=拡大）</p>
       </div>
       <div class="td_list">
@@ -88,6 +91,34 @@
       </div>
       <div id="buttonarea">
         <input id="setTenkiScaleCheck" type="button" value="決定"/>
+      </div>
+    </div>
+    <!-- タイマー設定エリア -->
+    <div class="detailesAreaContents" id="timerAreaContents" style="display:none;">
+      <div id="topArea">
+        <h1>タイマー設定</h1>
+        <p>天気ループの表示・非表示の時間を設定してください</p>
+      </div>
+      <div class="td_list timerContents">
+        <p>表示時間（HH:MM）</p>
+        <input type="text" id="showTimeInput" value="08:00" style="width:80px; text-align:right; font-size: 20px; margin: 10px;">
+        <input id="addStartTimerCheck" type="button" value="追加"/>
+      </div>
+      <div class="td_list timerContents">
+        <p>非表示時間（HH:MM）</p>
+        <input type="text" id="hideTimeInput" value="20:00" style="width:80px; text-align:right; font-size: 20px; margin: 10px;">
+        <input id="addStopTimerCheck" type="button" value="追加"/>
+      </div>
+      <div id="timerListArea">
+        <h2>タイマー一覧</h2>
+        <table id="timerListTable">
+          <thead>
+            <tr><th>モード</th><th>時刻</th><th>削除</th></tr>
+          </thead>
+          <tbody>
+            <!-- タイマー一覧がここに表示されます -->
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

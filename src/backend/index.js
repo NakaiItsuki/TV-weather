@@ -58,4 +58,22 @@ app.whenReady().then(() => {
     }
   });
 
+  ipcMain.on('message', (event, arg) => {
+    if (Array.isArray(arg) && arg[0] === 'display') {
+        const displayId = arg[1];
+        const displays = screen.getAllDisplays();
+        const targetDisplay = displays.find(d => d.id == displayId);
+        if (targetDisplay && mainWindow) {
+            // ディスプレイの左上座標にウィンドウを移動
+            mainWindow.setBounds({
+                x: targetDisplay.bounds.x,
+                y: targetDisplay.bounds.y,
+                width: mainWindow.getBounds().width,
+                height: mainWindow.getBounds().height
+            });
+            mainWindow.focus();
+        }
+    }
+});
+
 });

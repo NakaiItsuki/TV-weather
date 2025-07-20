@@ -26,6 +26,7 @@ body {
     background-color: #f3f3f3;
 }
 
+
 #menuArea {
     width: 30%;
     padding: 10px;
@@ -46,12 +47,12 @@ input[type="button"] {
     border: 0.5px solid #0f4273;
     font-size: 15px;
     padding: 5px 15px 5px 15px;
+    cursor: pointer;
 }
 
 input[type="button"]:hover {
     background-color: #196ec0;
 }
-
 
 #chitenAreaContents {
     box-sizing: border-box;
@@ -237,7 +238,7 @@ p {
     background-color: #f3f3f3;
     border-radius: 5px;
     margin: 5px;
-
+    cursor: pointer;
 }
 
 /* .fluentButton:hover{
@@ -352,9 +353,10 @@ input[type="checkbox"] {
     width: 20px;
     height: 20px;
     margin: 15px;
+    cursor: pointer;
 }
 
-#displaySelect{
+#displaySelect {
     font-size: 15px;
     padding: 8px;
 }
@@ -369,6 +371,7 @@ input[type="checkbox"] {
     margin-left: auto;
     margin-right: auto;
 }
+
 #sizeAreaContents #topArea {
     padding: 10px;
     display: flex;
@@ -376,9 +379,126 @@ input[type="checkbox"] {
     height: 80px;
     width: auto;
 }
+
 #sizeAreaContents .td_list {
     margin: 20px 10px 10px 10px;
 }
+
+#displayCardArea {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.displayCard{
+    width: 180px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    padding: 10px; 
+    text-align: center;
+}
+
+.displayName{
+    width: 100%;
+    text-align: center;
+}
+
+
+.displayInfo {
+    background: #f3f3f3;
+    border: 2px solid #bbb;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    padding: 10px;
+    margin: 5px;
+}
+
+.displayInfo.selected {
+    border-color: #005fba;
+    box-shadow: 0 0 10px #005fba44;
+}
+
+.displayInfo:hover {
+    border-color: #196ec0;
+}
+
+#timerListTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#timerListTable th, #timerListTable td {
+    border: 1px solid #bbb;
+    padding: 6px 10px;
+    text-align: center;
+}
+#timerListTable th {
+    background: #f3f3f3;
+}
+
+.timerContents {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5px 5px 5px 5px;
+    margin-bottom: 5px;
+}
+
+.timerContents p{
+    text-align: left;
+}
+
+.deleteStopTimerBtn{
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    background-color: #ab2929;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 0.5px solid #292929;
+    font-size: 15px;
+    padding: 5px 15px 5px 15px;
+    cursor: pointer;
+}
+.deleteStopTimerBtn:hover {
+    background-color: #c02c2c;
+}
+
+.deleteStartTimerBtn{
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    background-color: #ab2929;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 0.5px solid #292929;
+    font-size: 15px;
+    padding: 5px 15px 5px 15px;
+    cursor: pointer;
+}
+
+.deleteStartTimerBtn:hover {
+    background-color: #c02c2c;
+}
+
+
+
 @media (prefers-color-scheme: dark) {
     body {
         color: #ffffff;
@@ -482,4 +602,22 @@ input[type="checkbox"] {
         border-radius: 10px;
     }
 
+    .displayInfo {
+        background: #222;
+        color: #fff;
+        border-color: #444;
+    }
+
+    .displayInfo.selected {
+        border-color: #005fba;
+        box-shadow: 0 0 10px #3c3c3c88;
+    }
+    #timerListTable th {
+        background: #222;
+        color: #fff;
+    }
+    #timerListTable td {
+        background: #222;
+        color: #fff;
+    }
 }

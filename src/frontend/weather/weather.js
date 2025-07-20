@@ -97,6 +97,7 @@ $(function () {
         window.updateWeatherDatas = function (newWeatherDatas) {
             weather_datas = newWeatherDatas;
             currentIndex = 0; // インデックスをリセット
+            $('#tenki').css('opacity', 1);
         };
 
         setInterval(() => {
@@ -111,11 +112,10 @@ $(function () {
      * @returns {void}
      */
     function showWeather(weather_data) {
-        $('#tenki').css('opacity', 1);
         let nowTime = new Date();
         let nowHour = nowTime.getHours();//時間 Hour を取得する
         //17時以降は明日の天気を表示するようにする
-        if (nowHour >= 17) {
+        if (nowHour >= 16) {
             updateWeatherForTomorrow(weather_data);//明日の天気を表示
         } else {
             updateWeatherForToday(weather_data);//今日の天気を表示
@@ -256,18 +256,49 @@ $(function () {
      * @returns {Object} - 整形済みの天気情報オブジェクト
      */
     function formatWeather(weather, area_index) {
-        let area_name = weather[0].timeSeries[2].areas[area_index].area.name;//地点名を取得する
-        let tenki = weather[0].timeSeries[0].areas[area_index].weatherCodes[0];//天気コードを取得する
-        let htmp = weather[0].timeSeries[2].areas[area_index].temps[1];//今日の最高気温を取得する
-        let ltmp = weather[0].timeSeries[2].areas[area_index].temps[0];//今日の最低気温を取得する
-        let pop1 = weather[0].timeSeries[1].areas[area_index].pops[0];//今日の降水確率を取得する
-        let pop2 = weather[0].timeSeries[1].areas[area_index].pops[1];//今日の降水確率を取得する
-        let ntenki = weather[0].timeSeries[0].areas[area_index].weatherCodes[1];//明日の天気コードを取得する
-        let nhtmp = weather[0].timeSeries[2].areas.find(area => area.area.name === area_name).temps[1];//明日の最高気温を取得する
-        let nltmp = weather[0].timeSeries[2].areas.find(area => area.area.name === area_name).temps[0];//明日の最低気温を取得する
-        let npop1 = weather[0].timeSeries[1].areas[area_index].pops[2];//明日の降水確率を取得する
-        let npop2 = weather[0].timeSeries[1].areas[area_index].pops[3];//明日の降水確率を取得する
-        let childarray = { area: area_name, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };//取得したデータをまとめる
+        // 1. 基準となる日付を reportDatetime から取得
+        const reportDate = new Date(weather[0].reportDatetime);
+        const todayStr = reportDate.toISOString().slice(0, 10); // "YYYY-MM-DD"形式の今日の日付
+
+        const tomorrowDate = new Date(reportDate);
+        //【修正】getDate() のように()を付けて関数を呼び出す
+        tomorrowDate.setDate(reportDate.getDate() + 1);
+        const tomorrowStr = tomorrowDate.toISOString().slice(0, 10); // "YYYY-MM-DD"形式の明日の日付
+
+        // 2. 気温情報と時刻定義を取得
+        const tempTimeSeries = weather[0].timeSeries[2];
+        const timeDefines = tempTimeSeries.timeDefines;
+        const temps = tempTimeSeries.areas[area_index].temps;
+
+        // 3. timeDefines からインデックスを動的に探す
+        const todayLowIndex = timeDefines.findIndex(td => td.startsWith(todayStr));
+        const todayHighIndex = timeDefines.findLastIndex(td => td.startsWith(todayStr));
+        const tomorrowLowIndex = timeDefines.findIndex(td => td.startsWith(tomorrowStr));
+        const tomorrowHighIndex = timeDefines.findLastIndex(td => td.startsWith(tomorrowStr));
+
+        // 4. 取得したインデックスを元に、安全に気温データを取得
+        let ltmp;
+        if (todayLowIndex !== -1 && todayLowIndex !== todayHighIndex) {
+            ltmp = temps[todayLowIndex];
+        } else {
+            ltmp = '--';
+        }
+
+        const htmp = todayHighIndex !== -1 ? temps[todayHighIndex] : '--';
+        const nhtmp = tomorrowHighIndex !== -1 ? temps[tomorrowHighIndex] : '--';
+        const nltmp = tomorrowLowIndex !== -1 ? temps[tomorrowLowIndex] : '--';
+
+
+        // --- 以下の部分は変更なし ---
+        const area_name = tempTimeSeries.areas[area_index].area.name;
+        const tenki = weather[0].timeSeries[0].areas[area_index].weatherCodes[0];
+        const pop1 = weather[0].timeSeries[1].areas[area_index].pops[0];
+        const pop2 = weather[0].timeSeries[1].areas[area_index].pops[1];
+        const ntenki = weather[0].timeSeries[0].areas[area_index].weatherCodes[1];
+        const npop1 = weather[0].timeSeries[1].areas[area_index].pops[2];
+        const npop2 = weather[0].timeSeries[1].areas[area_index].pops[3];
+
+        const childarray = { area: area_name, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };
         return childarray;
     }
 
@@ -301,4 +332,54 @@ $(function () {
         const scale = window.localStorage.getItem('tenkiScale') || 1.0;
         $('#tenki').css('transform', 'scale(' + scale + ')');
     });
+
+    function checkStartTimers() {
+        const timers = JSON.parse(localStorage.getItem('tenkiStartTimers') || '[]');
+
+        timers.forEach(timer => {
+            const now = new Date();
+            const nowTime = now.getHours() * 60 + now.getMinutes();
+            const showTime = parseTime(timer.show);
+
+            // 表示時刻が設定されていて、現在時刻が表示時刻より前の場合、非表示にする
+            if (nowTime == showTime) {
+                $('#tenki').css('opacity', 1);
+            }
+        });
+
+
+    }
+
+    function checkStopTimers() {
+        const timers = JSON.parse(localStorage.getItem('tenkiStopTimers') || '[]');
+
+        timers.forEach(timer => {
+            const now = new Date();
+            const nowTime = now.getHours() * 60 + now.getMinutes();
+            const hideTime = parseTime(timer.hide);
+
+            // 表示時刻が設定されていて、現在時刻が表示時刻より前の場合、非表示にする
+            if (nowTime == hideTime) {
+                $('#tenki').css('opacity', 0);
+            }
+        });
+
+
+    }
+
+    // 時刻を数値 (分の単位) に変換
+    function parseTime(timeStr) {
+        if (!timeStr) return null; // 時刻が設定されていない場合は null を返す
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        return hours * 60 + minutes;
+    }
+
+
+    // 1分ごとにタイマーをチェック
+    setInterval(checkStartTimers, 1 * 1000);
+    setInterval(checkStopTimers, 1 * 1000);
+
+    // 初期状態をチェック
+    checkStartTimers();
+    checkStopTimers();
 });

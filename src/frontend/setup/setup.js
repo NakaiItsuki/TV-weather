@@ -120,7 +120,7 @@ $(function () {
 
     });
 
-    
+
     // 表示位置設定（X軸・Y軸）の決定ボタン
     $('#setichiCheck').on('click', function () {
         const x = $("#inputxnum").val();
@@ -150,35 +150,34 @@ $(function () {
         $('#displayAreaContents').show();
     });
     // ディスプレイ情報取得（Electron環境想定）
-    if (window.myAPI && window.myAPI.getDisplays) {
-        window.myAPI.getDisplays().then(displays => {
-            $('#displaySelect').empty();
-            displays.forEach((display, idx) => {
-                $('#displaySelect').append(`<option value="${display.id}">ディスプレイ${idx + 1} (${display.bounds.width}x${display.bounds.height})</option>`);
-            });
-        });
-    }
-    // ディスプレイ決定ボタン
-    $('#setDisplayCheck').on('click', function () {
-        const selectedDisplay = $('#displaySelect').val();
-        window.localStorage.setItem('displaynum', selectedDisplay);
-        window.myAPI.send(['display', selectedDisplay]);
-        alert('選択したディスプレイ: ' + selectedDisplay + ' に設定しました');
-    });
+    // if (window.myAPI && window.myAPI.getDisplays) {
+    //     window.myAPI.getDisplays().then(displays => {
+    //         $('#displaySelect').empty();
+    //         displays.forEach((display, idx) => {
+    //             $('#displaySelect').append(`<option value="${display.id}">ディスプレイ${idx + 1} (${display.bounds.width}x${display.bounds.height})</option>`);
+    //         });
+    //     });
+    // }
+    // // ディスプレイ決定ボタン
+    // $('#setDisplayCheck').on('click', function () {
+    //     const selectedDisplay = $('#displaySelect').val();
+    //     window.localStorage.setItem('displaynum', selectedDisplay);
+    //     window.myAPI.send(['display', selectedDisplay]);
+    // });
 
-    window.myAPI.getDisplays().then(displays => {
-        $('#displaySelect').empty();
-        displays.forEach((display, idx) => {
-            $('#displaySelect').append(`<option value="${display.id}">ディスプレイ${idx + 1} (${display.bounds.width}x${display.bounds.height})</option>`);
-        });
-    });
+    // window.myAPI.getDisplays().then(displays => {
+    //     $('#displaySelect').empty();
+    //     displays.forEach((display, idx) => {
+    //         $('#displaySelect').append(`<option value="${display.id}">ディスプレイ${idx + 1} (${display.bounds.width}x${display.bounds.height})</option>`);
+    //     });
+    // });
 
 
     // 選択状態管理
     let selectedButton = 'chitenListCheck'; // 初期選択
 
     // ボタンリスト
-    const buttons = ['chitenListCheck', 'ichiListCheck', 'displayListCheck','sizeListCheck'];
+    const buttons = ['chitenListCheck', 'ichiListCheck', 'displayListCheck', 'sizeListCheck', 'timerListCheck'];
 
     // 選択状態の背景色を更新
     function updateButtonColors() {
@@ -239,6 +238,12 @@ $(function () {
         $('.detailesAreaContents').hide();
         $('#sizeAreaContents').show();
     });
+    $('#timerListCheck').on('click', function () {
+        selectedButton = 'timerListCheck';
+        updateButtonColors();
+        $('.detailesAreaContents').hide();
+        $('#timerAreaContents').show();
+    });
 
     // サイズ決定ボタン
     $('#setTenkiScaleCheck').on('click', function () {
@@ -247,7 +252,6 @@ $(function () {
             window.localStorage.setItem('tenkiScale', scale);
             // weather.js側にスケール値を送信
             window.myAPI.send(['setTenkiScale', scale]);
-            alert('表示サイズを ' + scale + ' 倍に設定しました');
         } else {
             alert('倍率は0.5～3.0の範囲で入力してください');
         }
@@ -263,4 +267,168 @@ $(function () {
     updateButtonColors();
     $('.detailesAreaContents').hide();
     $('#chitenAreaContents').show();
+
+
+    // ディスプレイカード生成＆選択
+    function renderDisplayCards(displays) {
+        $('#displayCardArea').empty();
+        let selectedDisplayId = window.localStorage.getItem('displaynum'); // ここで保存済みディスプレイIDを取得
+        displays.forEach((display, idx) => {
+            const isSelected = selectedDisplayId == display.id;
+            const card = $(`
+            <div class="displayCard">
+                <div class="displayInfo${isSelected ? ' selected' : ''}" data-id="${display.id}">
+                    <div>${display.bounds.width} x ${display.bounds.height}</div>
+                </div>
+                <div class="displayName">ディスプレイ${idx + 1}</div>
+            </div>
+        `);
+            card.on('click', function () {
+                $('.displayInfo').removeClass('selected'); // displayInfoの枠色をリセット
+                $(this).find('.displayInfo').addClass('selected'); // displayInfoだけ枠色を変更
+                selectedDisplayId = display.id;
+                $('#setDisplayCheck').prop('disabled', false);
+            });
+            $('#displayCardArea').append(card);
+        });
+        $('#setDisplayCheck').off('click').on('click', function () {
+            if (selectedDisplayId) {
+                window.localStorage.setItem('displaynum', selectedDisplayId);
+                window.myAPI.send(['display', selectedDisplayId]);
+            }
+        });
+        $('#setDisplayCheck').prop('disabled', !selectedDisplayId);
+    }
+
+    // ディスプレイ情報取得（Electron環境想定）
+    if (window.myAPI && typeof window.myAPI.getDisplays === 'function') {
+        window.myAPI.getDisplays().then(renderDisplayCards);
+    } else {
+        // サンプル（ブラウザ用）
+        renderDisplayCards([
+            { id: 1, bounds: { width: 1920, height: 1080 } },
+            { id: 2, bounds: { width: 1280, height: 1024 } }
+        ]);
+    }
+
+
+    // タイマー管理用
+    let startTimerList = JSON.parse(window.localStorage.getItem('tenkiStartTimers') || '[]');
+    let stopTimerList = JSON.parse(window.localStorage.getItem('tenkiStopTimers') || '[]');
+
+    // タイマー一覧表示
+    function renderTimerList() {
+        const $tbody = $('#timerListTable tbody');
+        $tbody.empty();
+
+        // 1. すべてのタイマーを統合する
+        const allTimers = [];
+
+        startTimerList.forEach((timer, idx) => {
+            allTimers.push({
+                type: 'show',
+                time: timer.show, // ここで表示時間を格納
+                originalIdx: idx, // 元のリストでのインデックスを保持
+                originalList: 'start' // どのリストから来たかを保持
+            });
+        });
+
+        stopTimerList.forEach((timer, idx) => {
+            allTimers.push({
+                type: 'hide',
+                time: timer.hide, // ここで非表示時間を格納
+                originalIdx: idx, // 元のリストでのインデックスを保持
+                originalList: 'stop' // どのリストから来たかを保持
+            });
+        });
+
+        // 2. 時間でソートする
+        // 時間の形式によっては、より複雑なパースが必要になる場合があります。
+        // 例: "HH:MM:SS" 形式を Date オブジェクトに変換して比較するなど
+        allTimers.sort((a, b) => {
+            // ここでは、"HH:MM:SS" 形式の文字列として直接比較できると仮定します。
+            // より堅牢な比較のためには、Dateオブジェクトに変換することを推奨します。
+            // 例: const timeA = new Date(`2000/01/01 ${a.time}`);
+            //     const timeB = new Date(`2000/01/01 ${b.time}`);
+            //     return timeA.getTime() - timeB.getTime();
+            return a.time.localeCompare(b.time); // 文字列として比較
+        });
+
+        // ソートされたリストをレンダリング
+        allTimers.forEach((timer) => {
+            let row;
+            if (timer.type === 'show') {
+                row = $(`
+                <tr>
+                    <td>表示</td>
+                    <td>${timer.time}</td>
+                    <td><button class="deleteStartTimerBtn" data-idx="${timer.originalIdx}">削除</button></td>
+                </tr>
+            `);
+            } else { // type === 'hide'
+                row = $(`
+                <tr>
+                    <td>非表示</td>
+                    <td>${timer.time}</td>
+                    <td><button class="deleteStopTimerBtn" data-idx="${timer.originalIdx}">削除</button></td>
+                </tr>
+            `);
+            }
+            $tbody.append(row);
+        });
+    }
+
+    // HH:MM形式のバリデーション
+    function isValidTime(str) {
+        return /^([01]\d|2[0-3]):([0-5]\d)$/.test(str);
+    }
+
+    // タイマー追加
+    $('#addStartTimerCheck').on('click', function () {
+        const showTime = $('#showTimeInput').val();
+        if (isValidTime(showTime)) {
+            startTimerList.push({ show: showTime });
+            window.localStorage.setItem('tenkiStartTimers', JSON.stringify(startTimerList));
+            renderTimerList();
+        } else {
+            alert('表示時間はHH:MM形式で入力してください（例: 08:30）');
+        }
+    });
+
+    $('#addStopTimerCheck').on('click', function () {
+        const hideTime = $('#hideTimeInput').val();
+        if (isValidTime(hideTime)) {
+            stopTimerList.push({ hide: hideTime });
+            window.localStorage.setItem('tenkiStopTimers', JSON.stringify(stopTimerList));
+            renderTimerList();
+        } else {
+            alert('非表示時間はHH:MM形式で入力してください（例: 08:30）');
+        }
+    });
+
+    // タイマー削除
+    $('#timerListTable').on('click', '.deleteStartTimerBtn', function () {
+        const idx = $(this).data('idx');
+        startTimerList.splice(idx, 1);
+        window.localStorage.setItem('tenkiStartTimers', JSON.stringify(startTimerList));
+        renderTimerList();
+    });
+
+    $('#timerListTable').on('click', '.deleteStopTimerBtn', function () {
+        const idx = $(this).data('idx');
+        stopTimerList.splice(idx, 1);
+        window.localStorage.setItem('tenkiStopTimers', JSON.stringify(stopTimerList));
+        renderTimerList();
+    });
+
+    // 初期表示
+    renderTimerList();
+
+    // メニュー切り替え（例）
+    $('#timerListCheck').on('click', function () {
+        selectedButton = 'timerListCheck';
+        updateButtonColors();
+        $('.detailesAreaContents').hide();
+        $('#timerAreaContents').show();
+    });
 });
