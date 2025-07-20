@@ -378,9 +378,9 @@ $(function () {
         });
     }
 
-    // HH:MM形式のバリデーション
+    // HH:MM:SS形式のバリデーション
     function isValidTime(str) {
-        return /^([01]\d|2[0-3]):([0-5]\d)$/.test(str);
+        return /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/.test(str);
     }
 
     // タイマー追加
@@ -391,7 +391,7 @@ $(function () {
             window.localStorage.setItem('tenkiStartTimers', JSON.stringify(startTimerList));
             renderTimerList();
         } else {
-            alert('表示時間はHH:MM形式で入力してください（例: 08:30）');
+            alert('表示時間はHH:MM:SS形式で入力してください（例: 08:30:00）');
         }
     });
 
@@ -402,7 +402,7 @@ $(function () {
             window.localStorage.setItem('tenkiStopTimers', JSON.stringify(stopTimerList));
             renderTimerList();
         } else {
-            alert('非表示時間はHH:MM形式で入力してください（例: 08:30）');
+            alert('非表示時間はHH:MM:SS形式で入力してください（例: 08:30:00）');
         }
     });
 
