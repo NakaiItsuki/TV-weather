@@ -340,7 +340,7 @@ $(function () {
 
         timers.forEach(timer => {
             const now = new Date();
-            const nowTime = now.getHours() * 60 + now.getMinutes();
+            const nowTime = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
             const showTime = parseTime(timer.show);
 
             // 表示時刻が設定されていて、現在時刻が表示時刻より前の場合、非表示にする
@@ -357,7 +357,7 @@ $(function () {
 
         timers.forEach(timer => {
             const now = new Date();
-            const nowTime = now.getHours() * 60 + now.getMinutes();
+            const nowTime = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
             const hideTime = parseTime(timer.hide);
 
             // 表示時刻が設定されていて、現在時刻が表示時刻より前の場合、非表示にする
@@ -369,15 +369,15 @@ $(function () {
 
     }
 
-    // 時刻を数値 (分の単位) に変換
+    // 時刻を数値 (秒の単位) に変換
     function parseTime(timeStr) {
         if (!timeStr) return null; // 時刻が設定されていない場合は null を返す
-        const [hours, minutes] = timeStr.split(':').map(Number);
-        return hours * 60 + minutes;
+        const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+        return hours * 3600 + minutes * 60 + (seconds || 0);
     }
 
 
-    // 1分ごとにタイマーをチェック
+    // 1秒ごとにタイマーをチェック
     setInterval(checkStartTimers, 1 * 1000);
     setInterval(checkStopTimers, 1 * 1000);
 
