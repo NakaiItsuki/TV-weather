@@ -391,7 +391,7 @@ input[type="checkbox"] {
     margin: 20px 0;
 }
 
-.displayCard{
+.displayCard {
     width: 180px;
     height: 120px;
     display: flex;
@@ -399,11 +399,11 @@ input[type="checkbox"] {
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    padding: 10px; 
+    padding: 10px;
     text-align: center;
 }
 
-.displayName{
+.displayName {
     width: 100%;
     text-align: center;
 }
@@ -441,11 +441,14 @@ input[type="checkbox"] {
     margin-top: 10px;
     margin-bottom: 10px;
 }
-#timerListTable th, #timerListTable td {
+
+#timerListTable th,
+#timerListTable td {
     border: 1px solid #bbb;
     padding: 6px 10px;
     text-align: center;
 }
+
 #timerListTable th {
     background: #f3f3f3;
 }
@@ -460,11 +463,11 @@ input[type="checkbox"] {
     margin-bottom: 5px;
 }
 
-.timerContents p{
+.timerContents p {
     text-align: left;
 }
 
-.deleteStopTimerBtn{
+.deleteStopTimerBtn {
     width: auto;
     height: auto;
     font-size: 20px;
@@ -476,11 +479,12 @@ input[type="checkbox"] {
     padding: 5px 15px 5px 15px;
     cursor: pointer;
 }
+
 .deleteStopTimerBtn:hover {
     background-color: #c02c2c;
 }
 
-.deleteStartTimerBtn{
+.deleteStartTimerBtn {
     width: auto;
     height: auto;
     font-size: 20px;
@@ -497,7 +501,29 @@ input[type="checkbox"] {
     background-color: #c02c2c;
 }
 
+.time-input-group {
+    display: inline-flex;
+    align-items: center;
+    margin: 5px;
+}
 
+.time-input-group input[type="number"] {
+    width: 50px;
+    text-align: right;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.time-input-group span {
+    font-size: 20px;
+    margin: 0 5px;
+}
+
+.time-input-group input[type=number] {
+    -moz-appearance: textfield;
+}
 
 @media (prefers-color-scheme: dark) {
     body {
@@ -612,10 +638,12 @@ input[type="checkbox"] {
         border-color: #005fba;
         box-shadow: 0 0 10px #3c3c3c88;
     }
+
     #timerListTable th {
         background: #222;
         color: #fff;
     }
+
     #timerListTable td {
         background: #222;
         color: #fff;

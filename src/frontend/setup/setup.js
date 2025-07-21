@@ -129,7 +129,6 @@ $(function () {
             window.localStorage.setItem('tenkixnum', x);
             window.localStorage.setItem('tenkiynum', y);
             window.myAPI.send([2, x, y]);
-            alert("表示位置を設定しました。\nX: " + x + " / Y: " + y);
         } else {
             alert("X軸・Y軸の値を正しく入力してください。");
         }
@@ -141,7 +140,6 @@ $(function () {
         $("#inputynum").val(30);
         window.localStorage.setItem('tenkixnum', 380);
         window.localStorage.setItem('tenkiynum', 30);
-        alert("表示位置を初期値に戻しました。");
     });
 
     // ディスプレイ選択画面の表示切替
@@ -385,7 +383,11 @@ $(function () {
 
     // タイマー追加
     $('#addStartTimerCheck').on('click', function () {
-        const showTime = $('#showTimeInput').val();
+        const hour = String($('#showTimeHour').val()).padStart(2, '0');
+        const minute = String($('#showTimeMinute').val()).padStart(2, '0');
+        const second = String($('#showTimeSecond').val()).padStart(2, '0');
+        const showTime = `${hour}:${minute}:${second}`;
+
         if (isValidTime(showTime)) {
             startTimerList.push({ show: showTime });
             window.localStorage.setItem('tenkiStartTimers', JSON.stringify(startTimerList));
@@ -396,7 +398,11 @@ $(function () {
     });
 
     $('#addStopTimerCheck').on('click', function () {
-        const hideTime = $('#hideTimeInput').val();
+        const hour = String($('#hideTimeHour').val()).padStart(2, '0');
+        const minute = String($('#hideTimeMinute').val()).padStart(2, '0');
+        const second = String($('#hideTimeSecond').val()).padStart(2, '0');
+        const hideTime = `${hour}:${minute}:${second}`;
+
         if (isValidTime(hideTime)) {
             stopTimerList.push({ hide: hideTime });
             window.localStorage.setItem('tenkiStopTimers', JSON.stringify(stopTimerList));

@@ -101,12 +101,24 @@
       </div>
       <div class="td_list timerContents">
         <p>表示時間（HH:MM:SS）</p>
-        <input type="text" id="showTimeInput" value="08:00:01" style="width:80px; text-align:right; font-size: 20px; margin: 10px;">
+        <div class="time-input-group">
+          <input type="number" id="showTimeHour" min="0" max="23" value="08">
+          <span>:</span>
+          <input type="number" id="showTimeMinute" min="0" max="59" value="00">
+          <span>:</span>
+          <input type="number" id="showTimeSecond" min="0" max="59" value="01">
+        </div>
         <input id="addStartTimerCheck" type="button" value="追加"/>
       </div>
       <div class="td_list timerContents">
         <p>非表示時間（HH:MM:SS）</p>
-        <input type="text" id="hideTimeInput" value="20:00:30" style="width:80px; text-align:right; font-size: 20px; margin: 10px;">
+        <div class="time-input-group">
+          <input type="number" id="hideTimeHour" min="0" max="23" value="20">
+          <span>:</span>
+          <input type="number" id="hideTimeMinute" min="0" max="59" value="00">
+          <span>:</span>
+          <input type="number" id="hideTimeSecond" min="0" max="59" value="30">
+        </div>
         <input id="addStopTimerCheck" type="button" value="追加"/>
       </div>
       <div id="timerListArea">
