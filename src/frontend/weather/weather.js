@@ -114,6 +114,10 @@ $(function () {
     function showWeather(weather_data) {
         let nowTime = new Date();
         let nowHour = nowTime.getHours();//時間 Hour を取得する
+        // タイマーによって非表示に設定されている場合は、フェードアニメーションを実行しない
+        if ($('#tenki').css('opacity') !== '0') {
+            hideAndShowTenki();
+        }
         //17時以降は明日の天気を表示するようにする
         if (nowHour >= 16) {
             updateWeatherForTomorrow(weather_data);//明日の天気を表示
@@ -123,12 +127,27 @@ $(function () {
     }
 
     /**
+     * 天気情報を非表示にしてから再表示する関数
+     * @param {void}
+     * @returns {void}
+     */
+    function hideAndShowTenki() {
+        const tenkiElement = document.getElementById('tenki');
+        // 1. まず要素を透明にして非表示にする
+        tenkiElement.style.opacity = '0';
+
+        // 2. 5ミリ秒後に再表示するタイマーをセットする
+        setTimeout(() => {
+            tenkiElement.style.opacity = '1';
+        }, 5);
+    }
+
+    /**
      * 今日の天気情報を画面に表示する関数
      * @param {Object} weather_data - 1地点分の天気情報オブジェクト
      * @returns {void}
      */
     function updateWeatherForToday(weather_data) {
-        $('#tenki').css('opacity', 0);
         $('#asuarea').empty();//{id:asuarea}内の要素を削除する
         $('#ltmparea').empty();//{id:ltmparea}内の要素を削除する
         $('#ltmparea').append('<style>#tenki{opacity:1;}#tr2{opacity:0;}#htmp{top:5px;}#hp{top:30px;}</style>');//{id:ltmparea}内にCSSを追加する
@@ -141,7 +160,6 @@ $(function () {
         $('#pop2').empty();//{id:pop2}内の要素を削除する
         $('#pop2').append(Math.round(weather_data.pop2));//{id:pop2}内に降水確率を表示する
         let tenkimode = getWeatherMode(weather_data.tenki);//気象庁のサーバから取得した天気コードを変換する
-        $('#tenki').css('opacity', 1);
         animateWeatherIcon(tenkimode);//天気アイコンを表示
     }
 
@@ -258,38 +276,41 @@ $(function () {
      * @returns {Object} - 整形済みの天気情報オブジェクト
      */
     function formatWeather(weather, area_index) {
-        // 1. 基準となる日付を reportDatetime から取得
-        const reportDate = new Date(weather[0].reportDatetime);
-        const todayStr = reportDate.toISOString().slice(0, 10); // "YYYY-MM-DD"形式の今日の日付
+        // ... 冒頭のconsole.logはデバッグ用に残してもOK ...
 
-        const tomorrowDate = new Date(reportDate);
-        //【修正】getDate() のように()を付けて関数を呼び出す
-        tomorrowDate.setDate(reportDate.getDate() + 1);
-        const tomorrowStr = tomorrowDate.toISOString().slice(0, 10); // "YYYY-MM-DD"形式の明日の日付
+        // ▼▼▼【ここを修正】▼▼▼
+        // reportDatetimeの文字列から直接 "YYYY-MM-DD" を切り出す
+        const todayStr = weather[0].reportDatetime.slice(0, 10);
 
-        // 2. 気温情報と時刻定義を取得
+        // reportDateを元にしていたtomorrowDateも修正が必要
+        const tomorrow = new Date(todayStr);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().slice(0, 10);
+        // ▲▲▲【修正はここまで】▲▲▲
+
         const tempTimeSeries = weather[0].timeSeries[2];
         const timeDefines = tempTimeSeries.timeDefines;
-        const temps = tempTimeSeries.areas[area_index].temps;
+        const allTemps = tempTimeSeries.areas[area_index].temps;
 
-        // 3. timeDefines からインデックスを動的に探す
-        const todayLowIndex = timeDefines.findIndex(td => td.startsWith(todayStr));
-        const todayHighIndex = timeDefines.findLastIndex(td => td.startsWith(todayStr));
-        const tomorrowLowIndex = timeDefines.findIndex(td => td.startsWith(tomorrowStr));
-        const tomorrowHighIndex = timeDefines.findLastIndex(td => td.startsWith(tomorrowStr));
+        // これ以降のコードは変更不要です
+        const todayTempsAsNumbers = allTemps
+            .filter((temp, index) => timeDefines[index].startsWith(todayStr))
+            .map(temp => Number(temp));
 
-        // 4. 取得したインデックスを元に、安全に気温データを取得
-        let ltmp;
-        if (todayLowIndex !== -1 && todayLowIndex !== todayHighIndex) {
-            ltmp = temps[todayLowIndex];
-        } else {
+        const tomorrowTempsAsNumbers = allTemps
+            .filter((temp, index) => timeDefines[index].startsWith(tomorrowStr))
+            .map(temp => Number(temp));
+
+        const htmp = todayTempsAsNumbers.length > 0 ? Math.max(...todayTempsAsNumbers) : '--';
+        let ltmp = todayTempsAsNumbers.length > 0 ? Math.min(...todayTempsAsNumbers) : '--';
+
+        const nhtmp = tomorrowTempsAsNumbers.length > 0 ? Math.max(...tomorrowTempsAsNumbers) : '--';
+        const nltmp = tomorrowTempsAsNumbers.length > 0 ? Math.min(...tomorrowTempsAsNumbers) : '--';
+
+        const uniqueTodayTemps = new Set(todayTempsAsNumbers);
+        if (uniqueTodayTemps.size === 1) {
             ltmp = '--';
         }
-
-        const htmp = todayHighIndex !== -1 ? temps[todayHighIndex] : '--';
-        const nhtmp = tomorrowHighIndex !== -1 ? temps[tomorrowHighIndex] : '--';
-        const nltmp = tomorrowLowIndex !== -1 ? temps[tomorrowLowIndex] : '--';
-
 
         // --- 以下の部分は変更なし ---
         const area_name = tempTimeSeries.areas[area_index].area.name;
@@ -300,8 +321,7 @@ $(function () {
         const npop1 = weather[0].timeSeries[1].areas[area_index].pops[2];
         const npop2 = weather[0].timeSeries[1].areas[area_index].pops[3];
 
-        const childarray = { area: area_name, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };
-        return childarray;
+        return { area: area_name, tenki: tenki, htmp: htmp, ltmp: ltmp, pop1: pop1, pop2: pop2, ntenki: ntenki, nhtmp: nhtmp, nltmp: nltmp, npop1: npop1, npop2: npop2 };
     }
 
 
