@@ -154,12 +154,18 @@ $(function () {
         $('#chiten').empty();//{id:chiten}内の既存の地点名を削除する
         $('#chiten').append(weather_data.area);//{id:chiten}内に新規の地点名を表示する
         $('#htmp').empty();//{id:htmp}内の要素を削除する
-        $('#htmp').append(Math.round(weather_data.htmp));//{id:htmp}内に最高気温を表示する
+        // 今日の最高気温が取得できない場合は明日の最高気温を使う
+        const htmp = isNaN(weather_data.htmp) ? weather_data.nhtmp : weather_data.htmp;
+        $('#htmp').append(Math.round(htmp));//{id:htmp}内に最高気温を表示する
         $('#pop1').empty();//{id:pop1}内の要素を削除する
         $('#pop1').append(Math.round(weather_data.pop1));//{id:pop1}内に降水確率を表示する
         $('#pop2').empty();//{id:pop2}内の要素を削除する
         $('#pop2').append(Math.round(weather_data.pop2));//{id:pop2}内に降水確率を表示する
-        let tenkimode = getWeatherMode(weather_data.tenki);//気象庁のサーバから取得した天気コードを変換する
+        // 今日の天気が取得できない場合は明日の天気を使う
+        let tenkimode = getWeatherMode(weather_data.tenki);
+        if (tenkimode === null) {
+            tenkimode = getWeatherMode(weather_data.ntenki);
+        }
         animateWeatherIcon(tenkimode);//天気アイコンを表示
     }
 
@@ -398,8 +404,8 @@ $(function () {
 
 
     // 1秒ごとにタイマーをチェック
-    setInterval(checkStartTimers, 1 * 1000);
-    setInterval(checkStopTimers, 1 * 1000);
+    setInterval(checkStartTimers, 0.5 * 1000);
+    setInterval(checkStopTimers, 0.5 * 1000);
 
     // 初期状態をチェック
     checkStartTimers();
